@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Your Site</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      padding: 2em;
+    }
+    h1 {
+      color: #00ffff;
+    }
+    input[type="file"] {
+      margin: 1em 0;
+    }
+    .preview {
+      margin-top: 2em;
+      background: #222;
+      padding: 1em;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Upload Your Resume</h1>
+  <p>Select your resume (.PDF or .DOCX) and we'll turn it into a personal site.</p>
+  <input type="file" id="resume" />
+  <div class="preview" id="preview">
+    <p><strong>Preview will appear here...</strong></p>
+  </div>
+  <script>
+    document.getElementById('resume').addEventListener('change', function() {
+      document.getElementById('preview').innerHTML = '<p>Parsing resume...</p><p><em>(This is a mock preview. Parsing functionality will go here.)</em></p><h2>John Doe</h2><p>Web Developer, Python Enthusiast, Tech Blogger</p><ul><li>HTML/CSS/JS</li><li>Python & Flask</li><li>React</li></ul>';
+    });
+  </script>
+</body>
+</html>

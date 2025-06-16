@@ -1,164 +1,35 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PacMac Mobile</title>
-  <link rel="icon" type="image/png" href="Packie.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your One-Page Site</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="RipplePlugin/styles.css">
-  <style>
-    body {
-      margin: 0;
-      font-family: monospace;
-      background: #0f0f0f;
-      color: #33ff33;
-    }
-    header {
-      background: #000;
-      padding: 1em;
-      text-align: center;
-    }
-    header img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    nav {
-      background: #111;
-      text-align: center;
-      padding: 1em;
-    }
-    nav a {
-      color: #0ff;
-      margin: 0 1em;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    section {
-      padding: 2em;
-      max-width: 1000px;
-      margin: auto;
-    }
-    .pricing-box {
-      border: 1px solid #333;
-      padding: 1.5em;
-      margin: 1em 0;
-      background: #111;
-    }
-    footer {
-      background: #000;
-      color: #777;
-      padding: 1em;
-      text-align: center;
-    }
-    .skills-icons img {
-      width: 60px;
-      margin: 5px;
-    }
-  </style>
+  <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body>
-
   <header>
-    <img src="PacMac_Banner_Mobile_5.PNG" alt="VanLife Header Banner">
-    <h1>PacMac Mobile</h1>
-    <p>Web Design • Repairs • #VanLife</p>
+    <h1>Welcome to My Digital Presence</h1>
+    <p>Built with love by PacMacMobile's Resume Plugin</p>
   </header>
 
-  <nav>
-    <a href="#about">About</a>
-    <a href="#services">Services</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#upload">Resume</a>
-    <a href="#support">Support</a>
-  </nav>
+  <main>
+    <section>
+      <h2>About Me</h2>
+      <p>This is a personalized one-pager created from a resume. You can have one too!</p>
+    </section>
 
-  <section id="about">
-    <h2>Who We Are</h2>
-    <div style="display: flex; align-items: center;">
-      <img src="MattnTerra_oval.png" alt="Matt and Terra" style="width: 120px; height: auto; border-radius: 50%; margin-right: 20px;">
-      <p>We’re Matt and Terra—partners in code, creativity, and coffee-fueled campfire chats. We build web magic while roaming the wild.</p>
-    </div>
-  </section>
-
-  <section id="services">
-    <h2>Services We Offer</h2>
-    <ul>
-      <li>📱 Mobile phone & tablet repair (Apple & Android)</li>
-      <li>🌐 Web design & dev (HTML/CSS, WordPress, custom builds)</li>
-      <li>🛡️ Cybersecurity tools & setup (Kali-friendly)</li>
-    </ul>
-  </section>
-
-  <section id="pricing">
-    <h2>Choose Your Perfect Plan</h2>
-    <div class="pricing-box">
-      <h3>Starter - $3,499 upfront / $35/month</h3>
-      <ul>
-        <li>Mobile Responsive Design</li>
-        <li>Contact Form Integration</li>
-        <li>Basic CMS</li>
-        <li>Limited Support</li>
-        <li><strong>Add-ons:</strong> Google Suite, Basic SEO</li>
-      </ul>
-    </div>
-    <div class="pricing-box">
-      <h3>Professional - $7,499 upfront / $129/month</h3>
-      <ul>
-        <li>Everything in Starter</li>
-        <li>Custom Design Elements</li>
-        <li>Blog Integration</li>
-        <li>Advanced Security / HIPAA Compliant</li>
-        <li><strong>Add-ons:</strong> Google Suite, Advanced SEO</li>
-      </ul>
-    </div>
-    <div class="pricing-box">
-      <h3>Enterprise - $12,499 upfront / $350/month</h3>
-      <ul>
-        <li>All Professional Features</li>
-        <li>Personalized Strategy Sessions</li>
-        <li>Analytics Dashboard</li>
-        <li>Dedicated Account Manager</li>
-        <li>Ongoing Maintenance</li>
-      </ul>
-    </div>
-  </section>
-
-  <section id="upload">
-    <h2>Create Your Digital Presence</h2>
-    <form id="resumeForm">
-      <label>Upload Resume (PDF):</label><br/>
-      <input type="file" id="resumeInput" accept=".pdf"><br/><br/>
-      <button type="button" onclick="generateSite()">Generate My About Page</button>
-    </form>
-    <p id="resultMessage" style="margin-top: 1em;"></p>
-  </section>
-
-  <section id="support">
-    <h2>Support Our Journey</h2>
-    <p>We’re working toward a solar generator & off-grid dev setup.</p>
-    <p><a href="https://www.venmo.com/u/PackieMobile" target="_blank">💚 Spot Some Green</a></p>
-    <iframe src="https://github.com/sponsors/Mattjhagen/card" height="225" width="600" style="border: none;"></iframe>
-  </section>
-
-  <section>
-    <h2>We Speak Code</h2>
-    <div class="skills-icons">
-      <img src="CSS.png" alt="CSS">
-      <img src="404.png" alt="404">
-      <img src="Div.png" alt="<div>">
-      <img src="V1.png" alt="{}">
-      <img src="Packie.png" alt="PP">
-      <img src="UX.png" alt="UX">
-    </div>
-  </section>
+    <section class="ripple-referral">
+      <h3>Want your own site like this?</h3>
+      <p>Upload your resume and create your own digital presence for free!</p>
+      <a href="https://www.pacmacmobile.com/resume-builder/?ref=client123" class="cta-button">Get Started</a>
+      <p class="note">Free option includes a subdomain. Upgrade for your own custom URL + Google Workspace.</p>
+    </section>
+  </main>
 
   <footer>
-    <p>© 2025 PacMac Mobile — Powered by caffeine, code, and Jesus.</p>
+    <p>&copy; 2025 Powered by PacMacMobile</p>
   </footer>
-
-  <!-- Scripts -->
-  <script src="RipplePlugin/init.js"></script>
 </body>
 </html>

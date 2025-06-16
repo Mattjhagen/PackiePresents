@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PacMac Mobile</title>
+  <link rel="icon" type="image/png" href="Packie.png">
+  <link rel="stylesheet" href="RipplePlugin/styles.css">
   <style>
     body {
       margin: 0;
@@ -11,9 +13,6 @@
       background: #111;
       color: #eee;
     }
-    <header style="width: 100%; overflow: hidden; margin-bottom: 2rem;">
-  <img src="PacMac_Banner_Mobile_5.PNG" alt="#VanLife Header Banner" style="width: 100%; height: auto; display: block;" />
-</header>
     header {
       background-color: #008080;
       padding: 2em;
@@ -60,10 +59,17 @@
   </style>
 </head>
 <body>
+
+  <!-- Hero Banner -->
+  <div style="width: 100%; overflow: hidden; margin-bottom: 2rem;">
+    <img src="PacMac_Banner_Mobile_5.PNG" alt="#VanLife Header Banner" style="width: 100%; height: auto; display: block;" />
+  </div>
+
   <header>
     <h1>PacMac Mobile</h1>
     <p>Web Design • Repairs • #VanLife</p>
   </header>
+
   <nav>
     <a href="#about">About</a>
     <a href="#services">Services</a>
@@ -71,25 +77,16 @@
   </nav>
 
   <section id="about">
-  <div style="display: flex; align-items: center;">
-    <img src="MattnTerra_oval.png" alt="Matt and Terra" style="width: 150px; height: auto; border-radius: 50%; margin-right: 20px;">
-    <div>
-      <h2>Who We Are</h2>
-      <p>We’re Matt and Terra—partners in code, creativity, and coffee-fueled campfire chats. We build web magic while roaming the wild.</p>
+    <div style="display: flex; align-items: center;">
+      <img src="MattnTerra_oval.png" alt="Matt and Terra" style="width: 150px; height: auto; border-radius: 50%; margin-right: 20px;">
+      <div>
+        <h2>Who We Are</h2>
+        <p>We’re Matt and Terra—partners in code, creativity, and coffee-fueled campfire chats. We build web magic while roaming the wild.</p>
+      </div>
     </div>
-  </div>
-</section>
-  
-  <!-- Hero Banner Section -->
-<!--  <section style="background: url('PacMac_Banner_Mobile_5.PNG') center/cover no-repeat; padding: 5em 2em; text-align: right; <!--color: #ff69b4;">
   </section>
 
-  <!-- Main Content -->
   <div class="container">
-    <section id="about">
-      <h2>Who We Are</h2>
-      <p>We’re Matt & Terra -- queer digital nomads building tech-powered dreams out of a van. Whether it's web design from a Wi-Fi hotspot or slinging mobile repairs on the go, we're living proof you don’t need four walls to have a solid signal.</p>
-    </section>
     <section id="services">
       <h2>Services We Offer</h2>
       <ul>
@@ -101,6 +98,7 @@
         <p><strong>Need help or a quote?</strong><br>Email us at <a href="mailto:info@pacmacmobile.com" style="color:white;">vanlife@pacmacmobile.com</a></p>
       </div>
     </section>
+
     <section id="support">
       <h2>Support Our Journey</h2>
       <p>We’re currently building toward a solar generator and tools to work 100% off-grid. Want to help fuel the dream?</p>
@@ -108,79 +106,75 @@
         <p><strong><a href="https://www.venmo.com/u/PackieMobile" target="_blank" style="color:white;">Spot Some Green</a></strong></p>
         <iframe src="https://github.com/sponsors/Mattjhagen/card" title="Sponsor Mattjhagen" height="225" width="600" style="border: 0;"></iframe>
         <iframe
-      title="VANLIFE_7 checkout widget"
-      src="https://nas.io/checkout-widget?communityCode=VANLIFE_7&communitySlug=%2Fpackie&buttonText=Join%20as%20member&buttonTextColorHex=%23000&buttonBgColorHex=%23fccb1d&widgetTheme=dark&backgroundColorHex=%23000"
-      width="100%"
-      height="320"
-      frameborder="0"
-      referrerpolicy="no-referrer"
-    ></iframe>
+          title="VANLIFE_7 checkout widget"
+          src="https://nas.io/checkout-widget?communityCode=VANLIFE_7&communitySlug=%2Fpackie&buttonText=Join%20as%20member&buttonTextColorHex=%23000&buttonBgColorHex=%23fccb1d&widgetTheme=dark&backgroundColorHex=%23000"
+          width="100%"
+          height="320"
+          frameborder="0"
+          referrerpolicy="no-referrer"
+        ></iframe>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" style="background: #000000; padding: 60px 20px; font-family: sans-serif;">
+      <h2 style="text-align: center; font-size: 2em; margin-bottom: 40px;">Choose Your Perfect Plan</h2>
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; max-width: 1200px; margin: 0 auto;">
+
+        <!-- Starter Plan -->
+        <div style="background: black; border: 1px solid #000000; border-radius: 10px; padding: 30px; width: 300px;">
+          <h3 style="color: #008080;">Starter</h3>
+          <p><strong>$3,499</strong> upfront</p>
+          <p style="font-size: 1.5em;"><strong>$35/month</strong></p>
+          <ul>
+            <li>Mobile Responsive Design</li>
+            <li>Contact Form Integration</li>
+            <li>Basic Content Management System</li>
+            <li>Limited Support</li>
+          </ul>
+          <p><strong>Optional Add-ons:</strong></p>
+          <ul>
+            <li>Google Suite Integration</li>
+            <li>Basic SEO Setup</li>
+          </ul>
+        </div>
+
+        <!-- Professional Plan -->
+        <div style="background: black; border: 2px solid gold; border-radius: 10px; padding: 30px; width: 300px;">
+          <h3 style="color: #008080;">Professional</h3>
+          <p><strong>$7,499</strong> upfront</p>
+          <p style="font-size: 1.5em;"><strong>$129/month</strong></p>
+          <ul>
+            <li>All Starter Features</li>
+            <li>Custom Design Elements</li>
+            <li>Blog Integration</li>
+            <li>Advanced Security Features | HIPAA Compliant</li>
+          </ul>
+          <p><strong>Optional Add-ons:</strong></p>
+          <ul>
+            <li>Google Suite Integration</li>
+            <li>Advanced SEO Strategy</li>
+          </ul>
+        </div>
+
+        <!-- Enterprise Plan -->
+        <div style="background: black; border: 2px solid #28a745; border-radius: 10px; padding: 30px; width: 300px;">
+          <h3 style="color: #008080;">Enterprise</h3>
+          <p><strong>$12,499</strong> upfront</p>
+          <p style="font-size: 1.5em;"><strong>$350/month</strong></p>
+          <ul>
+            <li>All Professional Features</li>
+            <li>Personalized Strategy Sessions</li>
+            <li>Comprehensive Analytics Dashboard</li>
+            <li>Dedicated Account Manager</li>
+            <li>Ongoing Maintenance and Support</li>
+          </ul>
+        </div>
+
       </div>
     </section>
   </div>
 
-  <section id="pricing" style="background: #00000; padding: 60px 20px; font-family: sans-serif;">
-  <h2 style="text-align: center; font-size: 2em; margin-bottom: 40px;">Choose Your Perfect Plan</h2>
-  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; max-width: 1200px; margin: 0 auto;">
-    
-    <!-- Starter Plan -->
-    <div style="background: black; border: 1px solid #000000; border-radius: 10px; padding: 30px; width: 300px;">
-      <h3 style="color: #008080;">Starter</h3>
-      <p><strong>$3,499</strong> upfront</p>
-      <p style="font-size: 1.5em;"><strong>$35/month</strong></p>
-      <ul>
-        <li>Mobile Responsive Design</li>
-        <li>Contact Form Integration</li>
-        <li>Basic Content Management System</li>
-        <li>Limited Support</li>
-      </ul>
-      <p><strong>Optional Add-ons:</strong></p>
-      <ul>
-        <li>Google Suite Integration</li>
-        <li>Basic SEO Setup</li>
-      </ul>
-    </div>
-
-    <!-- Professional Plan -->
-    <div style="background: black; border: 2px solid gold; border-radius: 10px; padding: 30px; width: 300px;">
-      <h3 style="color: #008080;">Professional</h3>
-      <p><strong>$7,499</strong> upfront</p>
-      <p style="font-size: 1.5em;"><strong>$129/month</strong></p>
-      <ul>
-        <li>All Starter Features</li>
-        <li>Custom Design Elements</li>
-        <li>Blog Integration</li>
-        <li>Advanced Security Features | HIPAA Compliant</li>
-      </ul>
-      <p><strong>Optional Add-ons:</strong></p>
-      <ul>
-        <li>Google Suite Integration</li>
-        <li>Advanced SEO Strategy</li>
-      </ul>
-    </div>
-
-    <!-- Enterprise Plan -->
-    <div style="background: black; border: 2px solid #28a745; border-radius: 10px; padding: 30px; width: 300px;">
-      <h3 style="color: #008080;">Enterprise</h3>
-      <p><strong>$12,499</strong> upfront</p>
-      <p style="font-size: 1.5em;"><strong>$350/month</strong></p>
-      <ul>
-        <li>All Professional Features</li>
-        <li>Personalized Strategy Sessions</li>
-        <li>Comprehensive Analytics Dashboard</li>
-        <li>Dedicated Account Manager</li>
-        <li>Ongoing Maintenance and Support</li>
-      </ul>
-    </div>
-
-  </div>
-</section>
-
-        </ul>
-      <div class="cta">
-        <p><strong>Need help or a quote?</strong><br>Email us at <a href="mailto:info@pacmacmobile.com" style="color:white;">vanlife@pacmacmobile.com</a></p>
-      </div>
-  
   <!-- Skills Section -->
   <section style="padding: 2em; text-align: center;">
     <h2>We Speak Code</h2>
@@ -194,10 +188,11 @@
     </div>
   </section>
 
-  <link rel="icon" type="image/png" href="Packie.png">
-
   <footer>
     <p>© 2025 PacMac Mobile • Powered by caffeine, code, and Jesus.</p>
   </footer>
+
+  <!-- Ripple Plugin Scripts (deferred to load last) -->
+  <script src="RipplePlugin/init.js"></script>
 </body>
 </html>

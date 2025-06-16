@@ -9,3 +9,17 @@ document.addEventListener("DOMContentLoaded", function () {
   `;
   document.body.appendChild(cta);
 });
+function createRipple(event) {
+  const button = event.currentTarget;
+  const ripple = document.createElement("span");
+
+  ripple.classList.add("ripple");
+  ripple.style.left = `${event.offsetX}px`;
+  ripple.style.top = `${event.offsetY}px`;
+
+  button.appendChild(ripple);
+
+  setTimeout(() => {
+    ripple.remove();
+  }, 600);
+}

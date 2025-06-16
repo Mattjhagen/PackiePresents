@@ -1,32 +1,136 @@
-.ripple-btn {
-  position: relative;
-  overflow: hidden;
-  background-color: #00ffff;
-  color: #000;
-  padding: 0.75em 2em;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1em;
+/* Base styles */
+body {
+  margin: 0;
+  font-family: monospace;
+  background-color: #0f0f0f;
+  color: #33ff33;
+}
+
+/* Header */
+header {
+  background-color: #000;
+  padding: 1em;
+  text-align: center;
+}
+
+header img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Navigation */
+nav {
+  background-color: #111;
+  padding: 1em;
+  text-align: center;
+}
+
+nav a {
+  color: #00ffff;
+  margin: 0 1em;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.2s;
+}
+
+nav a:hover {
+  color: #ff69b4;
+}
+
+/* Section layout */
+section {
+  padding: 2em;
+  max-width: 1000px;
+  margin: auto;
+}
+
+/* Pricing Boxes */
+.pricing-box {
+  background-color: #111;
+  border: 1px solid #33ff33;
+  padding: 1.5em;
+  margin: 1em 0;
+  border-radius: 6px;
+}
+
+.pricing-box h3 {
+  color: #00ffff;
+}
+
+.pricing-box ul {
+  list-style: none;
+  padding: 0;
+}
+
+.pricing-box ul li::before {
+  content: "➤ ";
+  color: #33ff33;
+}
+
+/* Resume form */
+form#resumeForm {
+  background-color: #000;
+  padding: 1em;
+  border: 1px solid #33ff33;
+  border-radius: 6px;
+}
+
+form#resumeForm input,
+form#resumeForm button {
+  background: #111;
+  color: #33ff33;
+  border: 1px solid #33ff33;
+  padding: 0.5em;
+  margin-top: 0.5em;
+  font-family: monospace;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+form#resumeForm button:hover {
+  background: #222;
   cursor: pointer;
-  transition: background 0.3s ease;
 }
 
-.ripple-btn:hover {
-  background-color: #00cccc;
+/* Footer */
+footer {
+  background-color: #000;
+  color: #777;
+  padding: 1em;
+  text-align: center;
+  font-size: 0.9em;
 }
 
-.ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  animation: ripple-animation 0.6s linear;
-  transform: scale(0);
-  pointer-events: none;
+/* Skill icons */
+.skills-icons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1em;
 }
 
-@keyframes ripple-animation {
-  to {
-    transform: scale(4);
-    opacity: 0;
+.skills-icons img {
+  width: 60px;
+  height: auto;
+  border-radius: 4px;
+  background-color: #000;
+  padding: 0.5em;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  nav a {
+    display: block;
+    margin: 0.5em 0;
+  }
+
+  .pricing-box {
+    width: 100%;
+  }
+
+  .skills-icons {
+    flex-direction: column;
+    align-items: center;
   }
 }

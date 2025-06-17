@@ -125,81 +125,9 @@
     </div>
   </section>
   
-  <!-- upload resume --
-  
-  <label for="primaryColor">Primary Color:</label>
-<input type="color" id="primaryColor" value="#00ff99" />
 
-<label for="accentColor">Accent Color:</label>
-<input type="color" id="accentColor" value="#000000" />
-
-<input type="file" id="resume-upload" accept=".txt" />
-<button type="button" onclick="showLoadingEffect(generateAboutPage)">
-  Generate My About Me Page
-</button>
-
-<div id="loadingBarContainer" style="display: none; background: #222; height: 20px; width: 100%; margin-top: 1em;">
-  <div id="loadingBar" style="background: #00ff99; height: 100%; width: 0%; transition: width 0.3s;"></div>
-</div> --
-
-
-  function generateAboutPage() {
-    const resumeInput = document.getElementById("resume-upload");
-    if (!resumeInput || !resumeInput.files[0]) {
-      alert("Please upload a resume first.");
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = function (event) {
-      const resumeText = event.target.result;
-
-      const newWindow = window.open("", "_blank");
-      newWindow.document.write(`
-        <html>
-        <head>
-          <title>Your About Me Page</title>
-          <style>
-            body {
-              font-family: 'Courier New', monospace;
-              background-color: #0f0f0f;
-              color: #00ff99;
-              padding: 2em;
-            }
-            h1 {
-              border-bottom: 1px solid #00ff99;
-              padding-bottom: 0.5em;
-            }
-          </style>
-        </head>
-        <body>
-          <h1>About Me</h1>
-          <pre>${resumeText}</pre>
-        </body>
-        </html>
-      `);
-      newWindow.document.close();
-    };
-
-    reader.readAsText(resumeInput.files[0]);
-  }
-</script>
-
-  <!--section id="upload" 
-    <h2>Create Your Digital Presence</h2>
-    <form id="resumeForm">
-      <label>Upload Resume (PDF):</label><br/>
-      <input type="file" id="resume-upload" accept=".txt,.pdf,.docx" />
-      <button type="button" onclick="generateSite()">Generate My About Page</button>
-    </form>
-    Kali like loading animation bar 
-<div id="loadingBarContainer" style="display: none; background: #222; height: 20px; width: 100%; margin-top: 1em;">
-  <div id="loadingBar" style="background: #00ff99; height: 100%; width: 0%; transition: width 0.3s;"></div>
-</div>
-    <p id="resultMessage" style="margin-top: 1em;"></p>
-  </section -->
-  <!-- Upload + Generate Form 
-<section id="resume-generator" style="text-align:center; margin-top: 4em;" -->
+  <!-- Upload + Generate Form -->
+<section id="resume-generator" style="text-align:center; margin-top: 4em;" 
   <h2>Build Your Digital Presence</h2>
   <p>Select your resume (.txt) and customize your colors:</p>
   <input type="file" id="resumeUpload" accept=".txt" /><br><br>

@@ -29,3 +29,19 @@ header, footer {
   color: #aaaaaa;
   margin-top: 0.5em;
 }
+/* Kali-like Terminal Loading Animation */
+#loadingBarContainer {
+  width: 100%;
+  background-color: #111;
+  padding: 10px;
+  display: none;
+  margin-top: 20px;
+}
+
+#loadingBar {
+  width: 0%;
+  height: 20px;
+  background-color: #00ff99;
+  transition: width 0.5s ease;
+  box-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99;
+}

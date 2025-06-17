@@ -308,5 +308,83 @@
   <h2>Meet Me</h2>
   <div id="generated-content"></div>
 </section>
+
+<script>
+  function showLoadingEffect(callback) {
+    const container = document.getElementById("loadingBarContainer");
+    const bar = document.getElementById("loadingBar");
+
+    container.style.display = "block";
+    bar.style.width = "0%";
+    let progress = 0;
+
+    const interval = setInterval(() => {
+      progress += Math.random() * 15;
+      if (progress >= 100) {
+        progress = 100;
+        clearInterval(interval);
+        setTimeout(() => {
+          container.style.display = "none";
+          bar.style.width = "0%";
+          if (typeof callback === "function") callback();
+        }, 500);
+      }
+      bar.style.width = progress + "%";
+    }, 200);
+  }
+
+  function generateAboutPage() {
+    const resumeInput = document.getElementById("resume-upload");
+    if (!resumeInput || !resumeInput.files[0]) {
+      alert("Please upload a resume first.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      const resumeText = event.target.result;
+
+      const newWindow = window.open("", "_blank");
+      newWindow.document.write(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>About Me</title>
+          <style>
+            body {
+              background-color: #0f0f0f;
+              color: #00ff99;
+              font-family: 'Courier New', monospace;
+              padding: 2rem;
+            }
+            h1 {
+              color: #00ffff;
+              border-bottom: 1px solid #00ffff;
+              padding-bottom: 0.5rem;
+              margin-bottom: 1rem;
+            }
+            .resume-content {
+              white-space: pre-wrap;
+              background: #111;
+              padding: 1.5rem;
+              border: 1px solid #00ff99;
+              border-radius: 8px;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>About Me</h1>
+          <div class="resume-content">${resumeText.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+        </body>
+        </html>
+      `);
+      newWindow.document.close();
+    };
+
+    reader.readAsText(resumeInput.files[0]);
+  }
+</script>
 </body>
 </html>

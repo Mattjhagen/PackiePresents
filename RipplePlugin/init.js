@@ -1,3 +1,7 @@
+function generateAboutPage() {
+  console.log("Generating About Page...");
+  // rest of your code...
+}
 function createRipple(event) {
   const button = event.currentTarget;
   

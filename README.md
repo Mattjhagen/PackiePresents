@@ -39,5 +39,30 @@ Every bit goes toward keeping us connected, caffeinated, and coding from our tin
 Thanks for reading. Thanks for caring.  
 We hope to see you on the road or in the terminal. 💻🚐
 
+## 🧰 Build Your Own Site from a Resume (For Free!)
+
+We created an AI-powered tool that turns your resume into a slick, professional one-page website — no coding required.
+
+### 💡 Why It Matters
+
+Your resume *isn't* just a PDF anymore. With a personal site:
+- You **stand out** in hiring pipelines
+- You look more **professional and modern**
+- You’re easier to **Google**, share, and impress
+
+### ⚙️ Features
+
+- **Upload your resume (.pdf, .txt, .docx)**
+- **Instantly generate** a personalized About Me site
+- **Free subdomain** (like `yourname.pacmac.me`)
+- **Optional domain purchase** with Google Workspace email
+- You keep full control — **no logins or paywalls required**
+
+### 💸 Bonus Perk
+
+When someone buys a domain or adds Google Suite through your site, *you get a referral reward*. Spread the love, earn some digital coffee money ☕.
+
+👉 Try it now on [PacMacMobile.com](https://pacmacmobile.com) under **“Build Your Digital Presence.”**
+
 — Matt & Terra  
-#VanLife | #TransTech | #QueerCoders
+#VanLife | #TransTech

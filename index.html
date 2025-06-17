@@ -167,24 +167,5 @@
   <h2>Meet Me</h2>
   <div id="generated-content"></div>
 </section>
-<!-- Loading Terminal -->
-<div class="terminal-loader hidden" id="loadingTerminal">
-  <p>Initializing parse engine...</p>
-  <p>Injecting resume payload...</p>
-  <p>Decompiling content for analysis...</p>
-  <div class="progress-bar"><div class="progress"></div></div>
-</div>
-
-<script>
-function showLoadingEffect(callback) {
-  const loader = document.getElementById('loadingTerminal');
-  loader.classList.remove('hidden');
-
-  setTimeout(() => {
-    loader.innerHTML += '<p>Parsing complete. Launching site...</p>';
-    if (typeof callback === 'function') callback();
-  }, 3500);
-}
-</script>
 </body>
 </html>

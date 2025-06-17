@@ -1,331 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PacMac Mobile</title>
-  <link rel="icon" type="image/png" href="Packie.png">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="RipplePlugin/styles.css">
+  <meta charset="UTF-8">
+  <title>PacMac Presents</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      margin: 0;
+      background-color: #000;
+      color: #00ff99;
       font-family: monospace;
-      background: #0f0f0f;
-      color: #33ff33;
-    }
-    header {
-      background: #000;
-      padding: 1em;
       text-align: center;
+      padding: 20px;
     }
-    header img {
+    input, button {
+      margin: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background-color: #111;
+      color: #00ff99;
+      cursor: pointer;
+    }
+    #progressBar {
       width: 100%;
-      height: auto;
-      display: block;
+      height: 10px;
+      background-color: #111;
+      overflow: hidden;
+      position: relative;
     }
-    nav {
-      background: #111;
-      text-align: center;
-      padding: 1em;
+    #progressBar::before {
+      content: '';
+      position: absolute;
+      width: 30%;
+      height: 100%;
+      background-color: #00ff99;
+      animation: loading 1.5s infinite linear;
     }
-    nav a {
-      color: #0ff;
-      margin: 0 1em;
-      text-decoration: none;
-      font-weight: bold;
+    @keyframes loading {
+      from { left: -30%; }
+      to { left: 100%; }
     }
-    section {
-      padding: 2em;
-      max-width: 1000px;
-      margin: auto;
-    }
-    .pricing-box {
-      border: 1px solid #333;
-      padding: 1.5em;
-      margin: 1em 0;
-      background: #111;
-    }
-    footer {
-      background: #000;
-      color: #777;
-      padding: 1em;
-      text-align: center;
-    }
-    .skills-icons img {
-      width: 60px;
-      margin: 5px;
+    a {
+      color: #00ff99;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <img src="PacMac_Banner_Mobile_5.PNG" alt="VanLife Header Banner">
-    <h1>PacMac Mobile</h1>
-    <p>Web Design • Repairs • #VanLife</p>
-  </header>
-
-  <nav>
-    <a href="#about">About</a>
-    <a href="#services">Services</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#upload">Resume</a>
-    <a href="#support">Support</a>
-  </nav>
-
-  <section id="about">
-    <h2>Who We Are</h2>
-    <div style="display: flex; align-items: center;">
-      <img src="MattnTerra_oval.png" alt="Matt and Terra" style="width: 120px; height: auto; border-radius: 50%; margin-right: 20px;">
-      <p>We’re Matt and Terra—partners in code, creativity, and coffee-fueled campfire chats. We build web magic while roaming the wild.</p>
-    </div>
-  </section>
-
-  <section id="services">
-    <h2>Services We Offer</h2>
-    <ul>
-      <li>📱 Mobile phone & tablet repair (Apple & Android)</li>
-      <li>🌐 Web design & dev (HTML/CSS, WordPress, custom builds)</li>
-      <li>🛡️ Cybersecurity tools & setup (Kali-friendly)</li>
-    </ul>
-  </section>
-
-  <section id="pricing">
-    <h2>Choose Your Perfect Plan</h2>
-    <div class="pricing-box">
-      <h3>Starter - $3,499 upfront / $35/month</h3>
-      <ul>
-        <li>Mobile Responsive Design</li>
-        <li>Contact Form Integration</li>
-        <li>Basic CMS</li>
-        <li>Limited Support</li>
-        <li><strong>Add-ons:</strong> Google Suite, Basic SEO</li>
-      </ul>
-    </div>
-    <div class="pricing-box">
-      <h3>Professional - $7,499 upfront / $129/month</h3>
-      <ul>
-        <li>Everything in Starter</li>
-        <li>Custom Design Elements</li>
-        <li>Blog Integration</li>
-        <li>Advanced Security / HIPAA Compliant</li>
-        <li><strong>Add-ons:</strong> Google Suite, Advanced SEO</li>
-      </ul>
-    </div>
-    <div class="pricing-box">
-      <h3>Enterprise - $12,499 upfront / $350/month</h3>
-      <ul>
-        <li>All Professional Features</li>
-        <li>Personalized Strategy Sessions</li>
-        <li>Analytics Dashboard</li>
-        <li>Dedicated Account Manager</li>
-        <li>Ongoing Maintenance</li>
-      </ul>
-    </div>
-  </section>
-  
-
   <!-- Upload + Generate Form -->
-<section id="resume-generator" style="text-align:center; margin-top: 4em;" 
-  <h2>Build Your Digital Presence</h2>
-  <p>Select your resume (.txt) and customize your colors:</p>
-  <input type="file" id="resumeUpload" accept=".txt" /><br><br>
+  <section id="resume-generator">
+    <h2>Build Your Digital Presence</h2>
+    <p>Select your resume (.txt) and customize your colors:</p>
+    <input type="file" id="resumeUpload" accept=".txt"><br><br>
 
-  <label for="color1">Primary Color:</label>
-  <input type="color" id="color1" value="#00ff99" /><br><br>
+    <label for="color1">Primary Color:</label>
+    <input type="color" id="color1" value="#00ff99"><br><br>
 
-  <label for="color2">Secondary Color:</label>
-  <input type="color" id="color2" value="#111111" /><br><br>
+    <label for="color2">Secondary Color:</label>
+    <input type="color" id="color2" value="#111111"><br><br>
 
-  <label for="yourName">Your Name:</label>
-  <input type="text" id="yourName" placeholder="Matt" /><br><br>
+    <label for="yourName">Your Name:</label>
+    <input type="text" id="yourName" placeholder="Matt"><br><br>
 
-  <label for="bio">Short Bio:</label>
-  <input type="text" id="bio" placeholder="Builder. Nomad. Dreamer." /><br><br>
+    <label for="bio">Short Bio:</label>
+    <input type="text" id="bio" placeholder="Builder. Nomad. Dreamer."><br><br>
 
-  <button type="button" onclick="showLoadingEffect(generateAboutPage)">Generate My About Me Page</button>
+    <button type="button" onclick="showLoadingEffect(generateAboutPage)">Generate My About Me Page</button>
 
-  <!-- Loading animation bar -->
-  <div id="loadingBar" style="display:none; margin-top:20px;">
-    <div id="progressBar"></div>
-    <p style="color: #00ff99;">Generating... Stand by hacker ✨</p>
-  </div>
-</section>
+    <!-- Loading animation bar -->
+    <div id="loadingBar" style="display:none; margin-top:20px;">
+      <div id="progressBar"></div>
+      <p style="color: #00ff99;">⚡Generating... Stand by hacker ✨</p>
+    </div>
+  </section>
 
+  <!-- Support Section -->
   <section id="support">
     <h2>Support Our Journey</h2>
     <p>We’re working toward a solar generator & off-grid dev setup.</p>
     <p><a href="https://www.venmo.com/u/PackieMobile" target="_blank">💚 Spot Some Green</a></p>
-    <iframe src="https://github.com/sponsors/Mattjhagen/card" height="225" width="600" style="border: none;"></iframe>
+    <iframe src="https://github.com/sponsors/Mattjhagen/card" height="225" width="600" title="Sponsor Matt and Terra on GitHub"></iframe>
   </section>
 
-  <section>
-    <h2>We Speak Code</h2>
-    <div class="skills-icons">
-      <img src="CSS.png" alt="CSS">
-      <img src="404.png" alt="404">
-      <img src="Div.png" alt="<div>">
-      <img src="V1.png" alt="{}">
-      <img src="Packie.png" alt="PP">
-      <img src="UX.png" alt="UX">
-    </div>
-  </section>
-
-  <footer>
-    <p>© 2025 PacMac Mobile — Powered by caffeine, code, and Jesus.</p>
-  </footer>
-
-  <!-- Scripts -->
-  <script src="RipplePlugin/init.js"></script>
-  <script src="ResumePlugin/init.js"></script>
-  <div id="loadingBarContainer">
-  <div id="loadingBar"></div>
-</div>
+  <!-- JavaScript Logic -->
   <script>
-  function showLoadingEffect(callback) {
-    const container = document.getElementById("loadingBarContainer");
-    const bar = document.getElementById("loadingBar");
-
-    container.style.display = "block";
-    let progress = 0;
-
-    const interval = setInterval(() => {
-      progress += Math.random() * 10;
-      if (progress >= 100) {
-        progress = 100;
-        clearInterval(interval);
-        if (typeof callback === "function") {
-          callback();
-        }
-      }
-      bar.style.width = progress + "%";
-    }, 300);
-  }
-
-  function generateAboutPage() {
-    const resumeInput = document.getElementById("resume-upload");
-    if (!resumeInput || !resumeInput.files[0]) {
-      alert("Please upload a resume first.");
-      return;
+    function showLoadingEffect(callback) {
+      const loadingBar = document.getElementById("loadingBar");
+      loadingBar.style.display = "block";
+      setTimeout(() => {
+        callback();
+      }, 1500);
     }
 
-    const reader = new FileReader();
-    reader.onload = function (event) {
-      const resumeText = event.target.result;
+    function generateAboutPage() {
+      const fileInput = document.getElementById("resumeUpload");
+      const color1 = document.getElementById("color1").value;
+      const color2 = document.getElementById("color2").value;
+      const name = document.getElementById("yourName").value;
+      const bio = document.getElementById("bio").value;
 
-      const newWindow = window.open("", "_blank");
-      newWindow.document.write(`
-        <html>
-        <head>
-          <title>Your About Me Page</title>
-          <style>
-            body {
-              font-family: 'Courier New', monospace;
-              background-color: #0f0f0f;
-              color: #00ff99;
-              padding: 2em;
-            }
-            h1 {
-              border-bottom: 1px solid #00ff99;
-              padding-bottom: 0.5em;
-            }
-          </style>
-        </head>
-        <body>
-          <h1>About Me</h1>
-          <pre>${resumeText}</pre>
-        </body>
-        </html>
-      `);
-      newWindow.document.close();
-    };
-
-    reader.readAsText(resumeInput.files[0]);
-  }
-</script>
-  <!-- Output Preview -->
-<section id="about-me-preview" style="display:none;">
-  <h2>Meet Me</h2>
-  <div id="generated-content"></div>
-</section>
-
-<script>
-  function showLoadingEffect(callback) {
-    const container = document.getElementById("loadingBarContainer");
-    const bar = document.getElementById("loadingBar");
-
-    container.style.display = "block";
-    bar.style.width = "0%";
-    let progress = 0;
-
-    const interval = setInterval(() => {
-      progress += Math.random() * 15;
-      if (progress >= 100) {
-        progress = 100;
-        clearInterval(interval);
-        setTimeout(() => {
-          container.style.display = "none";
-          bar.style.width = "0%";
-          if (typeof callback === "function") callback();
-        }, 500);
+      const file = fileInput.files[0];
+      if (!file) {
+        alert("Please upload a resume file first.");
+        return;
       }
-      bar.style.width = progress + "%";
-    }, 200);
-  }
 
-  function generateAboutPage() {
-    const resumeInput = document.getElementById("resume-upload");
-    if (!resumeInput || !resumeInput.files[0]) {
-      alert("Please upload a resume first.");
-      return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const resumeText = e.target.result;
+
+        const aboutPage = `
+          <html>
+          <head>
+            <title>${name}'s About Me</title>
+            <style>
+              body {
+                background-color: ${color2};
+                color: ${color1};
+                font-family: monospace;
+                padding: 20px;
+              }
+              h1 {
+                color: ${color1};
+              }
+              pre {
+                background-color: rgba(0,0,0,0.2);
+                padding: 10px;
+                border-radius: 5px;
+              }
+            </style>
+          </head>
+          <body>
+            <h1>${name}</h1>
+            <p><em>${bio}</em></p>
+            <h2>Resume</h2>
+            <pre>${resumeText}</pre>
+          </body>
+          </html>
+        `;
+
+        const blob = new Blob([aboutPage], { type: "text/html" });
+        const url = URL.createObjectURL(blob);
+        window.open(url, "_blank");
+      };
+      reader.readAsText(file);
     }
+  </script>
 
-    const reader = new FileReader();
-    reader.onload = function (event) {
-      const resumeText = event.target.result;
-
-      const newWindow = window.open("", "_blank");
-      newWindow.document.write(`
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>About Me</title>
-          <style>
-            body {
-              background-color: #0f0f0f;
-              color: #00ff99;
-              font-family: 'Courier New', monospace;
-              padding: 2rem;
-            }
-            h1 {
-              color: #00ffff;
-              border-bottom: 1px solid #00ffff;
-              padding-bottom: 0.5rem;
-              margin-bottom: 1rem;
-            }
-            .resume-content {
-              white-space: pre-wrap;
-              background: #111;
-              padding: 1.5rem;
-              border: 1px solid #00ff99;
-              border-radius: 8px;
-            }
-          </style>
-        </head>
-        <body>
-          <h1>About Me</h1>
-          <div class="resume-content">${resumeText.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
-        </body>
-        </html>
-      `);
-      newWindow.document.close();
-    };
-
-    reader.readAsText(resumeInput.files[0]);
-  }
-</script>
 </body>
 </html>

@@ -145,16 +145,12 @@
 
 <section id="resume-generator">
   <h2>Build Your Digital Presence</h2>
-  <p>Select your resume (.txt, .pdf, .docx) and customize your colors:</p>
-<input type="file" id="resumeUpload">
-<input type="color" id="color1">
-<input type="color" id="color2">
-<input type="text" id="yourName">
-<input type="text" id="bio">
-<button onclick="showLoadingEffect(generateAboutPage)">Generate My About Me Page</button>
-  <div id="loadingBar" style="display:none; margin-top:1em;">
+  <p>Upload your resume (.txt only for now):</p>
+  <input type="file" id="resumeUpload" accept=".txt">
+  <button onclick="showLoadingEffect(generateAboutPage)">Generate My About Me Page</button>
+  <div id="loadingBar">
     <div id="progressBar"></div>
-    <p>Generating... Stand by...</p>
+    <p>Generating... Please wait...</p>
   </div>
 </section>
 
@@ -162,14 +158,13 @@
   <h2>Support Our Journey</h2>
   <p>We’re working toward a solar generator to work 100% off-grid.</p>
   <p><a href="https://www.venmo.com/u/PackieMobile" target="_blank">💚 Spot Some Green</a></p>
-  <iframe src="https://github.com/sponsors/Mattjhagen/card" height="225" width="600"></iframe>
 </section>
 
 <footer>
   <p>&copy; 2025 PacMac Mobile • Powered by caffeine, code, and Jesus.</p>
 </footer>
 
-<script src="RipplePlugin/init.js"></script>
+<script src="aboutme.js"></script>
 
 </body>
 </html>

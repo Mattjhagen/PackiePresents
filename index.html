@@ -169,46 +169,7 @@
   <p>&copy; 2025 PacMac Mobile • Powered by caffeine, code, and Jesus.</p>
 </footer>
 
-<!--script>
-  function showLoadingEffect(callback) {
-    document.getElementById("loadingBar").style.display = "block";
-    setTimeout(callback, 1500);
-  }
-
-  function generateAboutPage() {
-    const fileInput = document.getElementById("resumeUpload");
-    const color1 = document.getElementById("color1").value;
-    const color2 = document.getElementById("color2").value;
-    const name = document.getElementById("yourName").value;
-    const bio = document.getElementById("bio").value;
-
-    const file = fileInput.files[0];
-    if (!file) return alert("Please upload a resume file.");
-
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const resumeText = e.target.result;
-      const aboutPage = `
-        <html><head><title>${name}</title>
-        <style>
-          body { background: ${color2}; color: ${color1}; font-family: monospace; padding: 2em; }
-          h1 { color: ${color1}; }
-          pre { background: rgba(0,0,0,0.2); padding: 1em; border-radius: 5px; }
-        </style></head><body>
-        <h1>${name}</h1>
-        <p><em>${bio}</em></p>
-        <h2>Resume</h2>
-        <pre>${resumeText}</pre>
-        </body></html>
-      `;
-      const blob = new Blob([aboutPage], { type: "text/html" });
-      window.open(URL.createObjectURL(blob), "_blank");
-    };
-    reader.readAsText(file);
-  }
-</script>
-
-<script src="init.js"></script-->
+<script src="init.js"></script>
 
 </body>
 </html>

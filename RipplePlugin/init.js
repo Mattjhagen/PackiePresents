@@ -1,20 +1,4 @@
-function createRipple(event) {
-  const button = event.currentTarget;
-  const existingRipple = button.querySelector('.ripple');
-  if (existingRipple) existingRipple.remove();
-
-  const circle = document.createElement("span");
-  const diameter = Math.max(button.clientWidth, button.clientHeight);
-  const radius = diameter / 2;
-
-  circle.style.width = circle.style.height = `${diameter}px`;
-  circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
-  circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
-  circle.classList.add("ripple");
-
-  button.appendChild(circle);
-}
-
+// Show animated loading bar before running callback
 function showLoadingEffect(callback) {
   const bar = document.getElementById('loadingBar');
   const progress = document.getElementById('progressBar');
@@ -25,14 +9,15 @@ function showLoadingEffect(callback) {
   const loading = setInterval(() => {
     if (width >= 100) {
       clearInterval(loading);
-      callback();
+      callback(); // After loading animation, trigger page generation
     } else {
-      width += 6;
+      width += 5;
       progress.style.width = width + '%';
     }
-  }, 100);
+  }, 80);
 }
 
+// Generate the "About Me" page using the uploaded resume and user inputs
 function generateAboutPage() {
   const file = document.getElementById('resumeUpload').files[0];
   const reader = new FileReader();
@@ -47,7 +32,7 @@ function generateAboutPage() {
 
     const html = `
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>About ${name}</title>
@@ -66,6 +51,8 @@ function generateAboutPage() {
       padding: 1em;
       border-radius: 8px;
       overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
     }
   </style>
 </head>
@@ -73,9 +60,10 @@ function generateAboutPage() {
   <h1>${name}</h1>
   <p><strong>Bio:</strong> ${bio}</p>
   <h2>Resume</h2>
-  <pre>${content.replace(/</g, "&lt;")}</pre>
+  <pre>${content.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</pre>
 </body>
 </html>`;
+    
     const blob = new Blob([html], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     window.open(url, '_blank');

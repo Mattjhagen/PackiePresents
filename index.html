@@ -2,33 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PacMac Presents</title>
+  <title>PacMac Mobile - Web Design & VanLife</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       background-color: #000;
       color: #00ff99;
       font-family: monospace;
+      margin: 0;
+      padding: 0 1em;
       text-align: center;
-      padding: 20px;
+    }
+    header img {
+      width: 100%;
+      max-width: 800px;
+    }
+    section {
+      padding: 2em 0;
+    }
+    h2 {
+      margin-top: 0;
     }
     input, button {
-      margin: 10px;
       padding: 8px;
       border-radius: 5px;
       border: none;
+      font-family: monospace;
+      margin: 5px;
     }
     button {
       background-color: #111;
       color: #00ff99;
-      cursor: pointer;
     }
     #progressBar {
-      width: 100%;
       height: 10px;
       background-color: #111;
-      overflow: hidden;
       position: relative;
+      overflow: hidden;
     }
     #progressBar::before {
       content: '';
@@ -42,6 +52,13 @@
       from { left: -30%; }
       to { left: 100%; }
     }
+    .plan {
+      border: 2px solid;
+      padding: 1em;
+      margin: 1em auto;
+      max-width: 400px;
+      border-radius: 10px;
+    }
     a {
       color: #00ff99;
     }
@@ -49,105 +66,146 @@
 </head>
 <body>
 
-  <!-- Upload + Generate Form -->
-  <section id="resume-generator">
-    <h2>Build Your Digital Presence</h2>
-    <p>Select your resume (.txt) and customize your colors:</p>
-    <input type="file" id="resumeUpload" accept=".txt"><br><br>
+<header>
+  <img src="https://pacmacmobile.com/vanlife-banner.png" alt="#VanLife Banner">
+  <h1>PacMac Mobile</h1>
+  <p>Web Design • Repairs • #VanLife</p>
+</header>
 
-    <label for="color1">Primary Color:</label>
-    <input type="color" id="color1" value="#00ff99"><br><br>
+<nav>
+  <p>
+    <a href="#about">About</a> •
+    <a href="#services">Services</a> •
+    <a href="#plans">Plans</a> •
+    <a href="#support">Support</a>
+  </p>
+</nav>
 
-    <label for="color2">Secondary Color:</label>
-    <input type="color" id="color2" value="#111111"><br><br>
+<section id="about">
+  <h2>Who We Are</h2>
+  <img src="https://pacmacmobile.com/about-image.png" alt="Matt and Terra" style="border-radius:50%; width:150px;">
+  <p>We’re Matt and Terra—partners in code, creativity, and coffee-fueled campfire chats. We build web magic while roaming the wild.</p>
+</section>
 
-    <label for="yourName">Your Name:</label>
-    <input type="text" id="yourName" placeholder="Matt"><br><br>
+<section id="services">
+  <h2>Services We Offer</h2>
+  <ul style="text-align:left; display:inline-block">
+    <li>📱 Mobile repair (Apple & Android)</li>
+    <li>🧠 Web design & dev (HTML/CSS, WordPress)</li>
+    <li>🔒 Cybersecurity tools (Kali-friendly)</li>
+  </ul>
+</section>
 
-    <label for="bio">Short Bio:</label>
-    <input type="text" id="bio" placeholder="Builder. Nomad. Dreamer."><br><br>
+<section id="plans">
+  <h2>Choose Your Perfect Plan</h2>
 
-    <button type="button" onclick="showLoadingEffect(generateAboutPage)">Generate My About Me Page</button>
+  <div class="plan" style="border-color: #00ff99;">
+    <h3>Starter</h3>
+    <p>$3,499 upfront</p>
+    <p>$35/month</p>
+    <ul>
+      <li>Mobile Responsive Design</li>
+      <li>Contact Form Integration</li>
+      <li>Basic CMS</li>
+      <li>Limited Support</li>
+    </ul>
+    <strong>Add-ons:</strong>
+    <ul>
+      <li>Google Suite</li>
+      <li>Basic SEO</li>
+    </ul>
+  </div>
 
-    <!-- Loading animation bar -->
-    <div id="loadingBar" style="display:none; margin-top:20px;">
-      <div id="progressBar"></div>
-      <p style="color: #00ff99;">⚡Generating... Stand by hacker ✨</p>
-    </div>
-  </section>
+  <div class="plan" style="border-color: gold;">
+    <h3>Professional</h3>
+    <p>$7,499 upfront</p>
+    <p>$129/month</p>
+    <ul>
+      <li>All Starter Features</li>
+      <li>Custom Design</li>
+      <li>Blog Integration</li>
+      <li>HIPAA-Compliant Security</li>
+    </ul>
+  </div>
 
-  <!-- Support Section -->
-  <section id="support">
-    <h2>Support Our Journey</h2>
-    <p>We’re working toward a solar generator & off-grid dev setup.</p>
-    <p><a href="https://www.venmo.com/u/PackieMobile" target="_blank">💚 Spot Some Green</a></p>
-    <iframe src="https://github.com/sponsors/Mattjhagen/card" height="225" width="600" title="Sponsor Matt and Terra on GitHub"></iframe>
-  </section>
+  <div class="plan" style="border-color: limegreen;">
+    <h3>Enterprise</h3>
+    <p>$12,499 upfront</p>
+    <p>$350/month</p>
+    <ul>
+      <li>All Pro Features</li>
+      <li>Strategy Sessions</li>
+      <li>Analytics Dashboard</li>
+      <li>Account Manager</li>
+      <li>Ongoing Support</li>
+    </ul>
+  </div>
+</section>
 
-  <!-- JavaScript Logic -->
-  <script>
-    function showLoadingEffect(callback) {
-      const loadingBar = document.getElementById("loadingBar");
-      loadingBar.style.display = "block";
-      setTimeout(() => {
-        callback();
-      }, 1500);
-    }
+<section id="resume-generator">
+  <h2>Build Your Digital Presence</h2>
+  <p>Select your resume (.txt) and customize your colors:</p>
+  <input type="file" id="resumeUpload" accept=".txt"><br>
+  <input type="color" id="color1" value="#00ff99">
+  <input type="color" id="color2" value="#111111"><br>
+  <input type="text" id="yourName" placeholder="Matt">
+  <input type="text" id="bio" placeholder="Builder. Nomad. Dreamer."><br>
+  <button onclick="showLoadingEffect(generateAboutPage)">Generate My About Me Page</button>
+  <div id="loadingBar" style="display:none; margin-top:1em;">
+    <div id="progressBar"></div>
+    <p>⚡Generating... Stand by hacker ✨</p>
+  </div>
+</section>
 
-    function generateAboutPage() {
-      const fileInput = document.getElementById("resumeUpload");
-      const color1 = document.getElementById("color1").value;
-      const color2 = document.getElementById("color2").value;
-      const name = document.getElementById("yourName").value;
-      const bio = document.getElementById("bio").value;
+<section id="support">
+  <h2>Support Our Journey</h2>
+  <p>We’re working toward a solar generator to work 100% off-grid.</p>
+  <p><a href="https://www.venmo.com/u/PackieMobile" target="_blank">💚 Spot Some Green</a></p>
+  <iframe src="https://github.com/sponsors/Mattjhagen/card" height="225" width="600"></iframe>
+</section>
 
-      const file = fileInput.files[0];
-      if (!file) {
-        alert("Please upload a resume file first.");
-        return;
-      }
+<footer>
+  <p>&copy; 2025 PacMac Mobile • Powered by caffeine, code, and Jesus.</p>
+</footer>
 
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const resumeText = e.target.result;
+<script>
+  function showLoadingEffect(callback) {
+    document.getElementById("loadingBar").style.display = "block";
+    setTimeout(callback, 1500);
+  }
 
-        const aboutPage = `
-          <html>
-          <head>
-            <title>${name}'s About Me</title>
-            <style>
-              body {
-                background-color: ${color2};
-                color: ${color1};
-                font-family: monospace;
-                padding: 20px;
-              }
-              h1 {
-                color: ${color1};
-              }
-              pre {
-                background-color: rgba(0,0,0,0.2);
-                padding: 10px;
-                border-radius: 5px;
-              }
-            </style>
-          </head>
-          <body>
-            <h1>${name}</h1>
-            <p><em>${bio}</em></p>
-            <h2>Resume</h2>
-            <pre>${resumeText}</pre>
-          </body>
-          </html>
-        `;
+  function generateAboutPage() {
+    const fileInput = document.getElementById("resumeUpload");
+    const color1 = document.getElementById("color1").value;
+    const color2 = document.getElementById("color2").value;
+    const name = document.getElementById("yourName").value;
+    const bio = document.getElementById("bio").value;
 
-        const blob = new Blob([aboutPage], { type: "text/html" });
-        const url = URL.createObjectURL(blob);
-        window.open(url, "_blank");
-      };
-      reader.readAsText(file);
-    }
-  </script>
+    const file = fileInput.files[0];
+    if (!file) return alert("Please upload a resume file.");
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const resumeText = e.target.result;
+      const aboutPage = `
+        <html><head><title>${name}</title>
+        <style>
+          body { background: ${color2}; color: ${color1}; font-family: monospace; padding: 2em; }
+          h1 { color: ${color1}; }
+          pre { background: rgba(0,0,0,0.2); padding: 1em; border-radius: 5px; }
+        </style></head><body>
+        <h1>${name}</h1>
+        <p><em>${bio}</em></p>
+        <h2>Resume</h2>
+        <pre>${resumeText}</pre>
+        </body></html>
+      `;
+      const blob = new Blob([aboutPage], { type: "text/html" });
+      window.open(URL.createObjectURL(blob), "_blank");
+    };
+    reader.readAsText(file);
+  }
+</script>
 
 </body>
 </html>

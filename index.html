@@ -148,10 +148,10 @@
   <p>Upload your resume (.txt only for now):</p>
   <input type="file" id="resumeUpload" accept=".txt">
   <button onclick="showLoadingEffect(generateAboutPage)">Generate My About Me Page</button>
-  <div id="loadingBar">
-    <div id="progressBar"></div>
-    <p>Generating... Please wait...</p>
-  </div>
+  <div id="loadingBar" style="display:none; margin-top:1em;">
+  <div id="progressBar" style="height:10px; background:#111; width:0%; transition:width 0.3s;"></div>
+  <p id="loadingStatus">Generating... Stand by...</p>
+</div>
 </section>
 
 <section id="support">

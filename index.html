@@ -146,11 +146,12 @@
 <section id="resume-generator">
   <h2>Build Your Digital Presence</h2>
   <p>Select your resume (.txt, .pdf, .docx) and customize your colors:</p>
-  <input type="file" id="resumeUpload" accept=".txt,.pdf,.docx">
-  <input type="color" id="themeColor" value="#00ff99">
-  <input type="text" id="fullName" placeholder="yourname">
-  <input type="text" id="summary" placeholder="Optional Bio"><br>
-  <button onclick="showLoadingEffect(generateAboutPage)">Generate My About Me Page</button>
+<input type="file" id="resumeUpload">
+<input type="color" id="color1">
+<input type="color" id="color2">
+<input type="text" id="yourName">
+<input type="text" id="bio">
+<button onclick="showLoadingEffect(generateAboutPage)">Generate My About Me Page</button>
   <div id="loadingBar" style="display:none; margin-top:1em;">
     <div id="progressBar"></div>
     <p>Generating... Stand by...</p>

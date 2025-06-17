@@ -4,74 +4,64 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PacMac Mobile</title>
-  <link rel="icon" type="image/png" href="Packie.png" />
+  <link rel="icon" type="image/png" href="Packie.png">
+  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="RipplePlugin/styles.css">
-
   <style>
     body {
       margin: 0;
-      font-family: 'Courier New', monospace;
+      font-family: monospace;
       background: #0f0f0f;
-      color: #00ff99;
+      color: #33ff33;
     }
-
     header {
-      background-color: #000;
+      background: #000;
       padding: 1em;
       text-align: center;
     }
-
     header img {
-      max-width: 100%;
+      width: 100%;
       height: auto;
+      display: block;
     }
-
     nav {
-      background-color: #111;
-      padding: 1em;
+      background: #111;
       text-align: center;
+      padding: 1em;
     }
-
     nav a {
+      color: #0ff;
       margin: 0 1em;
-      color: #00ffff;
       text-decoration: none;
       font-weight: bold;
     }
-
-    .container {
+    section {
       padding: 2em;
-      max-width: 800px;
+      max-width: 1000px;
       margin: auto;
     }
-
-    .cta {
-      background: #222;
-      padding: 1em;
-      border-radius: 5px;
-      text-align: center;
-      margin-top: 2em;
-    }
-
-    footer {
+    .pricing-box {
+      border: 1px solid #333;
+      padding: 1.5em;
+      margin: 1em 0;
       background: #111;
-      color: #666;
-      text-align: center;
+    }
+    footer {
+      background: #000;
+      color: #777;
       padding: 1em;
-      margin-top: 2em;
+      text-align: center;
     }
-
     .skills-icons img {
-      width: 90px;
-      border-radius: 50%;
+      width: 60px;
+      margin: 5px;
     }
-style>
+  </style>
 </head>
- <body>
-
+<body>
 
   <header>
-    <img src="PacMac_Banner_Mobile_5.PNG" alt="#VanLife Header Banner">
+    <img src="PacMac_Banner_Mobile_5.PNG" alt="VanLife Header Banner">
     <h1>PacMac Mobile</h1>
     <p>Web Design • Repairs • #VanLife</p>
   </header>
@@ -79,140 +69,96 @@ style>
   <nav>
     <a href="#about">About</a>
     <a href="#services">Services</a>
-    <a href="#pricing">Plans</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#upload">Resume</a>
     <a href="#support">Support</a>
   </nav>
 
-  <section id="about" class="container">
+  <section id="about">
+    <h2>Who We Are</h2>
     <div style="display: flex; align-items: center;">
-      <img src="MattnTerra_oval.png" alt="Matt and Terra" style="width: 140px; height: auto; border-radius: 50%; margin-right: 20px;">
-      <div>
-        <h2>Who We Are</h2>
-        <p>We’re Matt and Terra—partners in code, creativity, and coffee-fueled campfire chats. We build web magic while roaming the wild.</p>
-      </div>
+      <img src="MattnTerra_oval.png" alt="Matt and Terra" style="width: 120px; height: auto; border-radius: 50%; margin-right: 20px;">
+      <p>We’re Matt and Terra—partners in code, creativity, and coffee-fueled campfire chats. We build web magic while roaming the wild.</p>
     </div>
   </section>
 
-  <section id="services" class="container">
+  <section id="services">
     <h2>Services We Offer</h2>
     <ul>
-      <li>🧰 Mobile phone & tablet repair (Apple & Android)</li>
-      <li>🧠 Web design & dev (HTML/CSS, WordPress, custom builds)</li>
-      <li>🔒 Cybersecurity tools & setup (Kali-friendly)</li>
+      <li>📱 Mobile phone & tablet repair (Apple & Android)</li>
+      <li>🌐 Web design & dev (HTML/CSS, WordPress, custom builds)</li>
+      <li>🛡️ Cybersecurity tools & setup (Kali-friendly)</li>
     </ul>
-    <div class="cta">
-      <p><strong>Need help or a quote?</strong><br>
-      Email us at <a href="mailto:info@pacmacmobile.com" style="color:#00ffff;">vanlife@pacmacmobile.com</a></p>
-    </div>
   </section>
 
-  <section id="pricing" class="container">
+  <section id="pricing">
     <h2>Choose Your Perfect Plan</h2>
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;">
-      <!-- Starter -->
-      <div style="background: #111; border: 1px solid #00ff99; border-radius: 10px; padding: 30px; width: 300px;">
-        <h3 style="color: #00ffff;">Starter</h3>
-        <p><strong>$3,499</strong> upfront</p>
-        <p style="font-size: 1.5em;"><strong>$35/month</strong></p>
-        <ul>
-          <li>Mobile Responsive Design</li>
-          <li>Contact Form Integration</li>
-          <li>Basic Content Management System</li>
-          <li>Limited Support</li>
-        </ul>
-        <p><strong>Add-ons:</strong></p>
-        <ul>
-          <li>Google Suite Integration</li>
-          <li>Basic SEO Setup</li>
-        </ul>
-      </div>
-
-      <!-- Professional -->
-      <div style="background: #111; border: 2px solid gold; border-radius: 10px; padding: 30px; width: 300px;">
-        <h3 style="color: #00ffff;">Professional</h3>
-        <p><strong>$7,499</strong> upfront</p>
-        <p style="font-size: 1.5em;"><strong>$129/month</strong></p>
-        <ul>
-          <li>All Starter Features</li>
-          <li>Custom Design Elements</li>
-          <li>Blog Integration</li>
-          <li>Advanced Security Features | HIPAA Compliant</li>
-        </ul>
-        <p><strong>Add-ons:</strong></p>
-        <ul>
-          <li>Google Suite Integration</li>
-          <li>Advanced SEO Strategy</li>
-        </ul>
-      </div>
-
-      <!-- Enterprise -->
-      <div style="background: #111; border: 2px solid #28a745; border-radius: 10px; padding: 30px; width: 300px;">
-        <h3 style="color: #00ffff;">Enterprise</h3>
-        <p><strong>$12,499</strong> upfront</p>
-        <p style="font-size: 1.5em;"><strong>$350/month</strong></p>
-        <ul>
-          <li>All Professional Features</li>
-          <li>Personalized Strategy Sessions</li>
-          <li>Comprehensive Analytics Dashboard</li>
-          <li>Dedicated Account Manager</li>
-          <li>Ongoing Maintenance and Support</li>
-        </ul>
-      </div>
+    <div class="pricing-box">
+      <h3>Starter - $3,499 upfront / $35/month</h3>
+      <ul>
+        <li>Mobile Responsive Design</li>
+        <li>Contact Form Integration</li>
+        <li>Basic CMS</li>
+        <li>Limited Support</li>
+        <li><strong>Add-ons:</strong> Google Suite, Basic SEO</li>
+      </ul>
+    </div>
+    <div class="pricing-box">
+      <h3>Professional - $7,499 upfront / $129/month</h3>
+      <ul>
+        <li>Everything in Starter</li>
+        <li>Custom Design Elements</li>
+        <li>Blog Integration</li>
+        <li>Advanced Security / HIPAA Compliant</li>
+        <li><strong>Add-ons:</strong> Google Suite, Advanced SEO</li>
+      </ul>
+    </div>
+    <div class="pricing-box">
+      <h3>Enterprise - $12,499 upfront / $350/month</h3>
+      <ul>
+        <li>All Professional Features</li>
+        <li>Personalized Strategy Sessions</li>
+        <li>Analytics Dashboard</li>
+        <li>Dedicated Account Manager</li>
+        <li>Ongoing Maintenance</li>
+      </ul>
     </div>
   </section>
 
-  <section id="support" class="container">
+  <section id="upload">
+    <h2>Create Your Digital Presence</h2>
+    <form id="resumeForm">
+      <label>Upload Resume (PDF):</label><br/>
+      <input type="file" id="resumeInput" accept=".pdf"><br/><br/>
+      <button type="button" onclick="generateSite()">Generate My About Page</button>
+    </form>
+    <p id="resultMessage" style="margin-top: 1em;"></p>
+  </section>
+
+  <section id="support">
     <h2>Support Our Journey</h2>
-    <p>We’re working toward a solar generator to work 100% off-grid. Want to help fuel the dream?</p>
-    <div class="cta">
-      <p><strong><a href="https://www.venmo.com/u/PackieMobile" target="_blank" style="color:#00ffff;">Sponsor Us</a></strong></p>
-      <iframe src="https://github.com/sponsors/Mattjhagen/card" title="Sponsor Mattjhagen" height="200" width="100%" style="border: 0;"></iframe>
-    </div>
+    <p>We’re working toward a solar generator & off-grid dev setup.</p>
+    <p><a href="https://www.venmo.com/u/PackieMobile" target="_blank">💚 Spot Some Green</a></p>
+    <iframe src="https://github.com/sponsors/Mattjhagen/card" height="225" width="600" style="border: none;"></iframe>
   </section>
 
-  <section style="text-align: center; margin: 3em 0;">
+  <section>
     <h2>We Speak Code</h2>
-    <div class="skills-icons" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1em;">
-      <img src="CSS.png" alt="CSS" />
-      <img src="404.png" alt="404" />
-      <img src="V1.png" alt="Code Symbol" />
-      <img src="Div.png" alt="Div" />
-      <img src="Packie.png" alt="P" />
-      <img src="UX.png" alt="UX" />
+    <div class="skills-icons">
+      <img src="CSS.png" alt="CSS">
+      <img src="404.png" alt="404">
+      <img src="Div.png" alt="<div>">
+      <img src="V1.png" alt="{}">
+      <img src="Packie.png" alt="PP">
+      <img src="UX.png" alt="UX">
     </div>
   </section>
-
-  <!-- Ripple Plugin JS -->
-  <script src="RipplePlugin/init.js"></script>
-</body>
-</html>
-<!-- Ripple Test -->
-‹section id="ripple-demo">
-
-<h2>Ripple Effect Demo</h2>
-
-<button class="ripple-btn" onclick="c
-
-Try the Ripple Effect
-
-</ button>
-
-</ section>
-
-<section style="text-align: center; margin: 4em 0;">
-  <h2>Ready to Build Your Own Site?</h2>
-  <a href="resume.html" style="display: inline-block; background-color: #00ffff; color: #000; padding: 1em 2em; border-radius: 5px; font-weight: bold; text-decoration: none;">
-    Build My Site
-  </a>
-</section>
 
   <footer>
-    <p>© 2025 PacMac Mobile • Powered by caffeine, code, and Jesus.</p>
+    <p>© 2025 PacMac Mobile — Powered by caffeine, code, and Jesus.</p>
   </footer>
 
-  <!-- Ripple Plugin Scripts -->
-  <link rel="stylesheet" href="RipplePlugin/styles.css">
+  <!-- Scripts -->
   <script src="RipplePlugin/init.js"></script>
 </body>
 </html>
-

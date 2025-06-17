@@ -218,6 +218,32 @@
 </div>
     <p id="resultMessage" style="margin-top: 1em;"></p>
   </section -->
+  <!-- Upload + Generate Form -->
+<section id="resume-generator" style="text-align:center; margin-top: 4em;">
+  <h2>Build Your Digital Presence</h2>
+  <p>Select your resume (.txt) and customize your colors:</p>
+  <input type="file" id="resumeUpload" accept=".txt" /><br><br>
+
+  <label for="color1">Primary Color:</label>
+  <input type="color" id="color1" value="#00ff99" /><br><br>
+
+  <label for="color2">Secondary Color:</label>
+  <input type="color" id="color2" value="#111111" /><br><br>
+
+  <label for="yourName">Your Name:</label>
+  <input type="text" id="yourName" placeholder="Matt" /><br><br>
+
+  <label for="bio">Short Bio:</label>
+  <input type="text" id="bio" placeholder="Builder. Nomad. Dreamer." /><br><br>
+
+  <button type="button" onclick="showLoadingEffect(generateAboutPage)">Generate My About Me Page</button>
+
+  <!-- Loading animation bar -->
+  <div id="loadingBar" style="display:none; margin-top:20px;">
+    <div id="progressBar"></div>
+    <p style="color: #00ff99;">Generating... Stand by hacker ✨</p>
+  </div>
+</section>
 
   <section id="support">
     <h2>Support Our Journey</h2>

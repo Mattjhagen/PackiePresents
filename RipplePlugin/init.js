@@ -39,3 +39,37 @@ document.getElementById('generateButton').addEventListener('click', () => {
 
   previewSection.style.display = 'block';
 });
+function showLoadingEffect(callback) {
+  const previewSection = document.getElementById('about-me-preview');
+  const output = document.getElementById('generated-content');
+  
+  previewSection.style.display = 'block';
+  output.innerHTML = `
+    <pre id="kali-loading" style="color: #00ff99; font-family: 'Courier New', monospace; background-color: #000; padding: 1em; border: 1px solid #00ff99;">
+[+] Initializing site generator...
+[+] Analyzing resume...
+[+] Extracting metadata...
+[+] Generating digital presence...
+[                    ] 0%
+    </pre>
+  `;
+
+  let progress = 0;
+  const loadingInterval = setInterval(() => {
+    progress += Math.floor(Math.random() * 10 + 1);
+    if (progress >= 100) {
+      progress = 100;
+      clearInterval(loadingInterval);
+      callback(); // call the generator function after animation finishes
+    }
+
+    const bar = '[' + '='.repeat(progress / 5) + ' '.repeat(20 - progress / 5) + `] ${progress}%`;
+    document.getElementById('kali-loading').innerHTML = `
+[+] Initializing site generator...
+[+] Analyzing resume...
+[+] Extracting metadata...
+[+] Generating digital presence...
+${bar}
+    `;
+  }, 150);
+}

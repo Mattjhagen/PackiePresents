@@ -5,65 +5,7 @@
   <title>PacMac Mobile - Web Design & VanLife</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="assets/favicon.png">
-  <style>
-    body {
-      background-color: #000;
-      color: #00ff99;
-      font-family: monospace;
-      margin: 0;
-      padding: 0 1em;
-      text-align: center;
-    }
-    header img {
-      width: 100%;
-      max-width: 800px;
-    }
-    section {
-      padding: 2em 0;
-    }
-    h2 {
-      margin-top: 0;
-    }
-    input, button {
-      padding: 8px;
-      border-radius: 5px;
-      border: none;
-      font-family: monospace;
-      margin: 5px;
-    }
-    button {
-      background-color: #111;
-      color: #00ff99;
-    }
-    #progressBar {
-      height: 10px;
-      background-color: #111;
-      position: relative;
-      overflow: hidden;
-    }
-    #progressBar::before {
-      content: '';
-      position: absolute;
-      width: 30%;
-      height: 100%;
-      background-color: #00ff99;
-      animation: loading 1.5s infinite linear;
-    }
-    @keyframes loading {
-      from { left: -30%; }
-      to { left: 100%; }
-    }
-    .plan {
-      border: 2px solid;
-      padding: 1em;
-      margin: 1em auto;
-      max-width: 400px;
-      border-radius: 10px;
-    }
-    a {
-      color: #00ff99;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -78,6 +20,7 @@
     <a href="#about">About</a> •
     <a href="#services">Services</a> •
     <a href="#plans">Plans</a> •
+    <a href="#resume">Resume</a> •
     <a href="#support">Support</a>
   </p>
 </nav>
@@ -143,15 +86,16 @@
   </div>
 </section>
 
-<section id="resume-generator">
+<section id="resume">
   <h2>Build Your Digital Presence</h2>
-  <p>Upload your resume (.txt only for now):</p>
-  <input type="file" id="resumeUpload" accept=".txt">
+  <p>Select your resume (.txt only):</p>
+  <input type="file" id="resumeUpload" accept=".txt"><br>
   <button onclick="showLoadingEffect(generateAboutPage)">Generate My About Me Page</button>
+
   <div id="loadingBar" style="display:none; margin-top:1em;">
-  <div id="progressBar" style="height:10px; background:#111; width:0%; transition:width 0.3s;"></div>
-  <p id="loadingStatus">Generating... Stand by...</p>
-</div>
+    <div id="progressBar"></div>
+    <p id="loadingStatus">Generating... Stand by...</p>
+  </div>
 </section>
 
 <section id="support">
@@ -165,6 +109,5 @@
 </footer>
 
 <script src="aboutme.js"></script>
-
 </body>
 </html>

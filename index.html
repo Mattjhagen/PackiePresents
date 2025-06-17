@@ -164,7 +164,68 @@
   <div id="loadingBarContainer">
   <div id="loadingBar"></div>
 </div>
-  
+  <script>
+  function showLoadingEffect(callback) {
+    const container = document.getElementById("loadingBarContainer");
+    const bar = document.getElementById("loadingBar");
+
+    container.style.display = "block";
+    let progress = 0;
+
+    const interval = setInterval(() => {
+      progress += Math.random() * 10;
+      if (progress >= 100) {
+        progress = 100;
+        clearInterval(interval);
+        if (typeof callback === "function") {
+          callback();
+        }
+      }
+      bar.style.width = progress + "%";
+    }, 300);
+  }
+
+  function generateAboutPage() {
+    const resumeInput = document.getElementById("resume-upload");
+    if (!resumeInput || !resumeInput.files[0]) {
+      alert("Please upload a resume first.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      const resumeText = event.target.result;
+
+      const newWindow = window.open("", "_blank");
+      newWindow.document.write(`
+        <html>
+        <head>
+          <title>Your About Me Page</title>
+          <style>
+            body {
+              font-family: 'Courier New', monospace;
+              background-color: #0f0f0f;
+              color: #00ff99;
+              padding: 2em;
+            }
+            h1 {
+              border-bottom: 1px solid #00ff99;
+              padding-bottom: 0.5em;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>About Me</h1>
+          <pre>${resumeText}</pre>
+        </body>
+        </html>
+      `);
+      newWindow.document.close();
+    };
+
+    reader.readAsText(resumeInput.files[0]);
+  }
+</script>
   <!-- Output Preview -->
 <section id="about-me-preview" style="display:none;">
   <h2>Meet Me</h2>

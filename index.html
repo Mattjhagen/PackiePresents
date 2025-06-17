@@ -125,7 +125,7 @@
     </div>
   </section>
   
-  <!-- upload resume -->
+  <!-- upload resume --
   
   <label for="primaryColor">Primary Color:</label>
 <input type="color" id="primaryColor" value="#00ff99" />
@@ -140,28 +140,8 @@
 
 <div id="loadingBarContainer" style="display: none; background: #222; height: 20px; width: 100%; margin-top: 1em;">
   <div id="loadingBar" style="background: #00ff99; height: 100%; width: 0%; transition: width 0.3s;"></div>
-</div>
+</div> -->
 
-<script>
-  function showLoadingEffect(callback) {
-    const container = document.getElementById("loadingBarContainer");
-    const bar = document.getElementById("loadingBar");
-
-    container.style.display = "block";
-    let progress = 0;
-
-    const interval = setInterval(() => {
-      progress += Math.random() * 10;
-      if (progress >= 100) {
-        progress = 100;
-        clearInterval(interval);
-        if (typeof callback === "function") {
-          callback();
-        }
-      }
-      bar.style.width = progress + "%";
-    }, 300);
-  }
 
   function generateAboutPage() {
     const resumeInput = document.getElementById("resume-upload");

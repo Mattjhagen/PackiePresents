@@ -29,7 +29,8 @@ header, footer {
   color: #aaaaaa;
   margin-top: 0.5em;
 }
-/* Kali-like Terminal Loading Animation */
+{
+/* Kali-like Terminal Loading Animation *
 #loadingBarContainer {
   width: 100%;
   background-color: #111;
@@ -43,5 +44,19 @@ header, footer {
   height: 20px;
   background-color: #00ff99;
   transition: width 0.5s ease;
-  box-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99;
+  box-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99; */
+
+#loadingBar {
+  width: 100%;
+  background-color: #333;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#progressBar {
+  height: 10px;
+  width: 0;
+  background-color: #00ff99;
+  transition: width 0.3s;
+}
 }

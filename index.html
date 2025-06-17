@@ -129,12 +129,12 @@
     <h2>Create Your Digital Presence</h2>
     <form id="resumeForm">
       <label>Upload Resume (PDF):</label><br/>
-      <input type="file" id="resumeInput" accept=".pdf, .txt, .docx"><br/><br/>
+      <input type="file" id="resume-upload" accept=".txt,.pdf,.docx" />
       <button type="button" onclick="generateSite()">Generate My About Page</button>
     </form>
     <!-- Kali like loading animation bar -->
-<div id="loadingBarContainer">
-  <div id="loadingBar"></div>
+<div id="loadingBarContainer" style="display: none; background: #222; height: 20px; width: 100%; margin-top: 1em;">
+  <div id="loadingBar" style="background: #00ff99; height: 100%; width: 0%; transition: width 0.3s;"></div>
 </div>
     <p id="resultMessage" style="margin-top: 1em;"></p>
   </section>

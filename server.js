@@ -18,6 +18,19 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Google OAuth Routes
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+app.get('/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+    console.log('✅ Google user info:', req.user);
+    res.redirect('/signup.html');
+  }
+);
+
 // Test Route
 app.get('/', (req, res) => {
   res.send('Resume Parser API with Google Auth is live!');

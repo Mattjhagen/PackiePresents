@@ -9,12 +9,25 @@ function generateAboutPage() {
   reader.onload = function (event) {
     const resumeText = event.target.result;
 
-    showLoadingEffect(() => {
-      fetch('https://packiepresents.onrender.com/parse-resume', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ resumeText })
-      })
+    document.getElementById('loadingBar').style.display = 'block';
+    document.getElementById('progressBar').style.width = '0%';
+    document.getElementById('loadingStatus').textContent = 'Generating... Stand by...';
+
+    let width = 0;
+    const interval = setInterval(() => {
+      if (width >= 100) {
+        clearInterval(interval);
+      } else {
+        width += 5;
+        document.getElementById('progressBar').style.width = width + '%';
+      }
+    }, 80);
+
+    fetch('https://packiepresents.onrender.com/parse-resume', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ resumeText })
+    })
       .then(res => {
         if (!res.ok) throw new Error(`Server error: ${res.status}`);
         return res.json();
@@ -30,7 +43,6 @@ function generateAboutPage() {
         document.getElementById('loadingStatus').textContent = '❌ Something went wrong.';
         alert('Something went wrong. Try again.');
       });
-    });
   };
 
   reader.readAsText(file);

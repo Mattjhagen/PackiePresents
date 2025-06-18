@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 
 app.post('/parse-resume', async (req, res) => {
   try {
-    const { resumeText } = req.body.resumeText;
+    const resumeText = req.body.resumeText;
 
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',

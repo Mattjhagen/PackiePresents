@@ -10,7 +10,7 @@ function generateAboutPage() {
     const resumeText = event.target.result;
 
     showLoadingEffect(() => {
-      fetch('https://resume-parser-api.onrender.com/parse-resume', {
+      fetch('https://packiepresents.onrender.com/parse-resume', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ resumeText })

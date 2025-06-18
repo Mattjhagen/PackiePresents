@@ -45,8 +45,6 @@ app.post('/parse-resume', async (req, res) => {
       }
     );
 
-    const formatted = response.data.choices[0].message.content;
-    res.send({ html: formatted });
   } catch (error) {
     console.error('Error parsing resume:', error.message);
     res.status(500).send('Failed to parse resume');
@@ -60,3 +58,15 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Resume Parser API is running on port ${PORT}`);
 });
+
+const ctaHTML = `
+  <hr>
+  <h2>🔧 Claim Your Digital Presence</h2>
+  <p>
+    <a href="https://pacmacmobile.com/signup.html?plan=free">Get a Free Subdomain (yourname.pacmacmobile.com)</a><br>
+    <a href="https://pacmacmobile.com/signup.html?plan=paid">Upgrade to a Custom Domain with GSuite Email</a>
+  </p>
+`;
+
+const formatted = response.data.choices[0].message.content + ctaHTML;
+res.send({ html: formatted });

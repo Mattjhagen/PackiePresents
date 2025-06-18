@@ -1,22 +1,16 @@
 {
   "name": "resume-parser-api",
   "version": "1.0.0",
-  "description": "Backend API to parse resumes using OpenAI GPT",
+  "description": "API to parse resumes using OpenAI",
   "main": "resumeParser.js",
   "scripts": {
     "start": "node resumeParser.js"
   },
   "dependencies": {
     "axios": "^1.6.7",
-    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2"
-  },
-  "engines": {
-    "node": ">=16.0.0"
-  },
-  "keywords": ["openai", "resume", "parser", "express"],
-  "author": "Matt Hagen",
-  "license": "MIT"
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2"
+  }
 }

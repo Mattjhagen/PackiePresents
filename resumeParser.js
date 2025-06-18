@@ -24,16 +24,17 @@ app.post('/parse-resume', async (req, res) => {
       'https://api.openai.com/v1/chat/completions',
       {
         model: 'gpt-4',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are an expert resume formatter. Format the given resume into a clean, professional personal webpage summary.',
-          },
-          {
-            role: 'user',
-            content: resumeText,
-          },
-        ],
+    
+      messages: [
+  {
+    role: 'system',
+    content: `You are an expert personal branding web developer. When given a plain text resume, return a full professional 1-page HTML document styled in clean white and black, centered, with bold section headers (like Contact, Skills, Experience, Education). Use semantic HTML. The result should be visually impressive and easily scannable. Do NOT return markdown. Only return clean HTML.`,
+  },
+  {
+    role: 'user',
+    content: resumeText
+  }
+],
         temperature: 0.7,
       },
       {

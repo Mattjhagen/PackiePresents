@@ -13,7 +13,10 @@ module.exports = function (app) {
       // Trigger domain/Google Suite purchase automation here
       return res.send('Thanks for signing up! We’ll reach out about your custom domain.');
     }
-
+if (plan === 'paid') {
+      // Trigger domain/Google Suite purchase automation here
+      return res.send('Thanks for signing up! We’ll reach out about your custom domain.');
+    }
     res.send(`Welcome, ${name}! Your free subdomain will be generated soon.`);
   });
 };

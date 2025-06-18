@@ -28,3 +28,27 @@
   <script src="signup.js"></script>
 </body>
 </html>
+document.getElementById('signupForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const formData = new FormData(this);
+  const data = {
+    name: formData.get('name'),
+    email: formData.get('email'),
+    plan: formData.get('plan')
+  };
+
+  try {
+    const res = await fetch('https://packiepresents.onrender.com/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const msg = await res.text();
+    document.getElementById('signupMessage').textContent = msg;
+  } catch (err) {
+    console.error('Signup error:', err);
+    document.getElementById('signupMessage').textContent = 'Something went wrong.';
+  }
+});

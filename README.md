@@ -64,5 +64,40 @@ When someone buys a domain or adds Google Suite through your site, *you get a re
 
 👉 Try it now on [PacMacMobile.com](https://pacmacmobile.com) under **“Build Your Digital Presence.”**
 
+## 🧠 How It Works: AI-Powered Resume Parsing + Personality Themes
+
+When you upload your resume, we don’t just slap your name on a template — we let AI **read it like a recruiter** and **build your personal brand** into the design.
+
+### 📄 Parsing the Resume
+
+Our backend uses AI to:
+- Extract your **name**, **experience**, **skills**, and **education**
+- Summarize your **background** into a clear, compelling intro
+- Organize everything into a clean, web-ready layout
+
+### 🎨 Matching Your Vibe
+
+Instead of cookie-cutter templates, our system:
+- Analyzes keywords and tone from your resume
+- Applies a **theme that fits your personality** (e.g. minimalist for engineers, bold and bright for creatives)
+- Lets you tweak colors, fonts, and layout if you want to fine-tune
+
+### 🌐 Result?
+
+A unique, mobile-friendly About Me page that feels *like you* — not just your résumé.
+
+**Example:**  
+Upload a resume that says *“ethical hacker + minimalist”*, and you'll get a dark-themed, terminal-style page.  
+Upload one that screams *“creative marketer + traveler”*, and you’ll get bold fonts, vibrant colors, and maybe a 🌍 emoji or two.
+
+### 🚀 What’s Next
+
+We’re expanding to let users:
+- Choose from AI-curated themes
+- Link to their portfolios and socials
+- Share their page with a free subdomain or custom domain
+
+> *Because your story deserves more than a PDF.*
+
 — Matt & Terra  
 #VanLife | #TransTech

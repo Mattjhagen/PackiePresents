@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Your Account</title>
+</head>
+<body>
+  <h2>Create Your Digital Presence</h2>
+  <form id="signupForm">
+    <input type="text" name="name" placeholder="Your Name" required /><br />
+    <input type="email" name="email" placeholder="Your Email" required /><br />
+
+    <label>
+      <input type="radio" name="plan" value="free" checked />
+      Free Subdomain
+    </label>
+    <label>
+      <input type="radio" name="plan" value="paid" />
+      Paid Custom Domain + GSuite
+    </label><br /><br />
+
+    <button type="submit">Sign Up</button>
+  </form>
+
+  <p id="signupMessage"></p>
+
+  <script src="signup.js"></script>
+</body>
+</html>

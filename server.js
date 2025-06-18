@@ -36,6 +36,10 @@ app.get('/', (req, res) => {
   res.send('Resume Parser API with Google Auth is live!');
 });
 
+// Signup Handler
+const signupHandler = require('./signupHandler');
+signupHandler(app);
+
 // Resume Parser Route
 app.post('/parse-resume', async (req, res) => {
   try {

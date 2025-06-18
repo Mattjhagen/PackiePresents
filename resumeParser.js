@@ -52,7 +52,10 @@ app.post('/parse-resume', async (req, res) => {
     res.status(500).send('Failed to parse resume');
   }
 });
-
+//import nd register signup route
+const signupRoute = require('./signupRoute');
+signupRoute(app);
+//Start Server
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Resume Parser API is running on port ${PORT}`);

@@ -22,29 +22,29 @@ app.get('/', (req, res) => {
   res.send('🚀 Supabase OAuth + Resume Parser API running!');
 });
 
-// Route to trigger Supabase OAuth (Google)
+// Supabase OAuth route
 app.get('/login', async (req, res) => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: 'https://packiepresents.onrender.com/callback'
+      redirectTo: `${process.env.PUBLIC_URL || 'https://packiepresents.onrender.com'}/callback`
     }
   });
 
-  if (error) {
+  if (error || !data?.url) {
+    console.error('OAuth redirect error:', error?.message || 'No URL returned');
     return res.status(500).send('Auth error');
   }
 
-  res.redirect(data.url); // Supabase login redirect
+  res.redirect(data.url);
 });
 
-// Callback route after Supabase OAuth
-app.get('/callback', async (req, res) => {
-  // The token will be handled by Supabase client on the frontend.
+// Supabase OAuth callback (handled by frontend auth)
+app.get('/callback', (req, res) => {
   res.redirect('/signup.html');
 });
 
-// Resume parser route
+// Resume Parser Route
 app.post('/parse-resume', async (req, res) => {
   try {
     const resumeText = req.body.resumeText;
@@ -115,6 +115,18 @@ app.post('/parse-resume', async (req, res) => {
     console.error('❌ Resume error:', error.message);
     res.status(500).send('Error parsing resume.');
   }
+});
+
+// Example route to save domain after login (call from frontend if needed)
+app.post('/save-domain', async (req, res) => {
+  const { email, type, domain } = req.body;
+
+  if (!email || !type || !domain) {
+    return res.status(400).send('Missing fields');
+  }
+
+  await saveUserDomain(email, type, domain);
+  res.send('✅ Domain saved!');
 });
 
 app.listen(PORT, () => {

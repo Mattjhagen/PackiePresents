@@ -1,5 +1,3 @@
-// saveDomain.js
-
 const { createClient } = require('@supabase/supabase-js');
 
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -47,4 +45,7 @@ async function getDomainsForUser(email) {
   return data;
 }
 
-module.exports = { saveUserDomain, getDomainsForUser };
+module.exports = {
+  saveUserDomain,
+  getDomainsForUser
+};

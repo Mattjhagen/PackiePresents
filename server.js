@@ -69,8 +69,21 @@ app.post('/parse-resume', async (req, res) => {
       }
     );
 
-    const formatted = response.data.choices[0].message.content;
-    res.send({ html: formatted });
+    const ctaHTML = `
+  <hr>
+  <div style="text-align:center; margin-top:2em;">
+    <h2>🛠️ Claim Your Digital Presence</h2>
+    <p>
+      <a href="https://packiepresents.onrender.com/auth/google"
+         style="font-size:1.2em; text-decoration:none; color:#00ffcc;">
+         👉 Sign in with Google to publish your page on a free subdomain or upgrade with GSuite
+      </a>
+    </p>
+  </div>
+`;
+
+const formatted = response.data.choices[0].message.content + ctaHTML;
+res.send({ html: formatted });
 
   } catch (error) {
     console.error('Error parsing resume:', error.message);

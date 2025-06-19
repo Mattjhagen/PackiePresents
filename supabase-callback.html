@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Supabase Callback</title>
+</head>
+<body>
+  <h1>🔁 Redirecting...</h1>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    const supabase = createClient('https://xyzcompany.supabase.co', 'your-anon-key');
+    const { data, error } = await supabase.auth.getSession();
+
+    if (error) {
+      document.body.innerHTML = '<h2>❌ Error: ' + error.message + '</h2>';
+    } else {
+      const user = data.session?.user;
+      if (user) {
+        document.body.innerHTML = '<h2>✅ Welcome, ' + user.email + '!</h2>';
+      } else {
+        document.body.innerHTML = '<h2>⚠️ No user session found.</h2>';
+      }
+    }
+  </script>
+</body>
+</html>

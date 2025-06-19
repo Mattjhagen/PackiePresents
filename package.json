@@ -1,19 +1,22 @@
-// package.json
 {
   "name": "packie-server",
   "version": "1.0.0",
-  "type": "module",
-  "description": "Backend for PacMacMobile using Supabase for auth and domain saving",
+  "description": "Backend for PacMacMobile resume parsing, Supabase Auth, and signup handling",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
+  "keywords": ["resume", "oauth", "gpt", "gsuite", "subdomain", "signup"],
+  "author": "Matt Hagen",
+  "license": "MIT",
   "dependencies": {
-    "@supabase/supabase-js": "^2.39.5",
     "axios": "^1.6.7",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2"
-  }
+    "express": "^4.18.2",
+    "node-fetch": "^2.6.1",
+    "@supabase/supabase-js": "^2.39.5"
+  },
+  "type": "commonjs"
 }
-

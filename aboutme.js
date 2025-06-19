@@ -23,11 +23,13 @@ function generateAboutPage() {
       }
     }, 80);
 
-    fetch('https://packiepresents.onrender.com/parse-resume', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ resumeText })
-    })
+    fetch("https://packiepresents.onrender.com/parse-resume", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ resumeText: yourTextVariable })
+})
       .then(res => {
         if (!res.ok) throw new Error(`Server error: ${res.status}`);
         return res.json();

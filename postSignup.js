@@ -1,91 +1,185 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Choose Your Plan</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: sans-serif;
-      max-width: 600px;
-      margin: auto;
-      padding: 2em;
-    }
-    .hidden { display: none; }
-    input, select, button {
-      display: block;
-      margin-top: 1em;
-      width: 100%;
-      padding: 0.5em;
-    }
-    .success {
-      color: green;
-      margin-top: 2em;
-    }
-  </style>
-</head>
-<body>
-  <h1>Claim Your Spot Online</h1>
-  <form id="planForm">
-    <input type="text" id="name" placeholder="Your Name" required>
-    <input type="email" id="email" placeholder="Your Email" required>
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import fetch from 'node-fetch';
+import Stripe from 'stripe';
+import { createClient } from '@supabase/supabase-js';
+import { saveUserDomain } from './saveDomain.js';
 
-    <label><input type="radio" name="plan" value="free" checked> Free Subdomain</label>
-    <label><input type="radio" name="plan" value="paid"> Paid Custom Domain + Google Suite</label>
+dotenv.config();
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-    <div id="paidOptions" class="hidden">
-      <p>We'll email you when it's ready or enter your card details below to pre-register.</p>
-      <input type="text" id="cardInfo" placeholder="Card Info (Optional)">
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.static('public'));
+
+app.get('/', (req, res) => {
+  res.send('🚀 Supabase OAuth + Resume Parser API running!');
+});
+
+app.get('/login', async (req, res) => {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: `${process.env.PUBLIC_URL || 'https://packiepresents.onrender.com'}/callback`
+    }
+  });
+
+  if (error || !data?.url) {
+    console.error('OAuth redirect error:', error?.message || 'No URL returned');
+    return res.status(500).send('Auth error');
+  }
+
+  res.redirect(data.url);
+});
+
+app.get('/callback', (req, res) => {
+  res.redirect('/signup.html');
+});
+
+app.post('/parse-resume', async (req, res) => {
+  try {
+    const resumeText = req.body.resumeText;
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'gpt-4',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are an expert resume formatter. Format the resume into a professional About Me HTML page.'
+          },
+          {
+            role: 'user',
+            content: resumeText
+          }
+        ],
+        temperature: 0.5
+      })
+    });
+
+    const data = await response.json();
+    const formattedContent = data.choices?.[0]?.message?.content || 'No response from OpenAI.';
+
+    const fullHTML = `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Your About Me Page</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 800px;
+        margin: auto;
+        padding: 2em;
+        line-height: 1.6;
+      }
+      h2 {
+        margin-top: 2em;
+        text-align: center;
+      }
+      .cta {
+        text-align: center;
+        margin-top: 3em;
+      }
+      a.cta-link {
+        display: inline-block;
+        text-decoration: none;
+        font-size: 1.1em;
+        color: #00ffff;
+        background: #000;
+        padding: 0.75em 1.5em;
+        border: 2px solid #00ffff;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      a.cta-link:hover {
+        background: #00ffff;
+        color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    ${formattedContent}
+    <div class="cta">
+      <h2>🔧 Claim Your Digital Presence</h2>
+      <a class="cta-link" id="supabaseLogin">Sign in with Google via Supabase</a>
     </div>
 
-    <button type="submit">Claim</button>
-  </form>
-
-  <p id="message" class="success"></p>
-
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-
-    const supabase = createClient(
-      'https://qaegmajxjdfqtispqdnt.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFhZWdtYWp4amRmcXRpc3BxZG50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAzMDk2OTUsImV4cCI6MjA2NTg4NTY5NX0.DmO2FMufZ7LBVY3nVOv0r0P7HuD4kvgKjBy8cC-MjJw'
-    );
-
-    document.querySelectorAll('input[name="plan"]').forEach(radio => {
-      radio.addEventListener('change', () => {
-        document.getElementById('paidOptions').classList.toggle('hidden', radio.value !== 'paid');
-      });
-    });
-
-    document.getElementById('planForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const plan = document.querySelector('input[name="plan"]:checked').value;
-      const cardInfo = document.getElementById('cardInfo').value.trim();
-
-      const domainType = plan === 'paid' ? 'custom' : 'subdomain';
-      const domainValue = plan === 'paid' ? `${name.toLowerCase()}.com` : `${name.toLowerCase()}.pacmacmobile.com`;
-
-      const { data: { session }, error } = await supabase.auth.getSession();
-
-      if (!session?.user) {
+    <script>
+      document.getElementById('supabaseLogin').addEventListener('click', function () {
         window.location.href = '/login';
-        return;
-      }
-
-      const response = await fetch('https://packiepresents.onrender.com/save-domain', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, type: domainType, domain: domainValue })
       });
+    </script>
+  </body>
+  </html>
+`;
 
-      const msg = await response.text();
-      document.getElementById('message').innerText = `✅ ${msg}`;
+    res.send(fullHTML);
+  } catch (error) {
+    console.error('❌ Resume error:', error.message);
+    res.status(500).send('Error parsing resume.');
+  }
+});
 
-      // Send email or cardInfo to internal db or placeholder API if needed
-      console.log({ email, name, plan, cardInfo });
+app.post('/save-domain', async (req, res) => {
+  const { email, type, domain } = req.body;
+
+  if (!email || !type || !domain) {
+    return res.status(400).send('Missing fields');
+  }
+
+  await saveUserDomain(email, type, domain);
+  res.send('✅ Domain saved!');
+});
+
+app.post('/create-checkout-session', async (req, res) => {
+  const { email, name } = req.body;
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      customer_email: email,
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'PacMac Paid Domain Plan',
+              description: `Custom domain + Google Suite setup for ${name}`
+            },
+            unit_amount: 1500
+          },
+          quantity: 1
+        }
+      ],
+      mode: 'payment',
+      success_url: `${process.env.PUBLIC_URL || 'https://packiepresents.onrender.com'}/thank-you.html`,
+      cancel_url: `${process.env.PUBLIC_URL || 'https://packiepresents.onrender.com'}/postSignup.html`
     });
-  </script>
-</body>
-</html>
+
+    res.json({ url: session.url });
+  } catch (err) {
+    console.error('Stripe error:', err.message);
+    res.status(500).json({ error: 'Payment failed' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});

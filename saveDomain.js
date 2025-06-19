@@ -1,11 +1,17 @@
 // saveDomain.js
+
 const { createClient } = require('@supabase/supabase-js');
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY // Use service role for inserts
-);
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('SUPABASE_URL and SUPABASE_ANON_KEY must be defined');
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Now use `supabase` to interact with your Supabase DB
 // Save domain
 async function saveUserDomain(email, domainType, domainValue) {
   const { data, error: checkError } = await supabase

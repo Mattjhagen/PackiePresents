@@ -1,74 +1,47 @@
 // saveDomain.js
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
-const fs = require('fs');
+const { createClient } = require('@supabase/supabase-js');
 
-// Make sure ./data directory exists
-const dataDir = path.resolve(__dirname, './data');
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir);
-}
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY // Use service role for inserts
+);
 
-// Database path
-const dbPath = path.resolve(dataDir, 'domains.db');
-const db = new sqlite3.Database(dbPath);
+// Save domain
+async function saveUserDomain(email, domainType, domainValue) {
+  const { data, error: checkError } = await supabase
+    .from('user_domains')
+    .select('*')
+    .eq('user_email', email)
+    .eq('domain_value', domainValue)
+    .maybeSingle();
 
-// Create table if not exists
-db.serialize(() => {
-  db.run(`
-    CREATE TABLE IF NOT EXISTS user_domains (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_email TEXT NOT NULL,
-      domain_type TEXT NOT NULL,
-      domain_value TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-  `, (err) => {
-    if (err) {
-      console.error('❌ Failed to create table:', err.message);
-    } else {
-      console.log('✅ user_domains table ready');
-    }
-  });
-});
+  if (checkError) return console.error('❌ Error checking domain:', checkError.message);
+  if (data) return console.log(`⚠️ Domain already exists for ${email}: ${domainValue}`);
 
-// Save domain with duplicate check
-function saveUserDomain(email, domainType, domainValue) {
-  const checkQuery = `
-    SELECT * FROM user_domains WHERE user_email = ? AND domain_value = ?
-  `;
-  db.get(checkQuery, [email, domainValue], (err, row) => {
-    if (err) {
-      return console.error('❌ Error checking domain:', err.message);
-    }
-    if (row) {
-      return console.log(`⚠️ Domain already exists for ${email}: ${domainValue}`);
-    }
+  const { error: insertError } = await supabase
+    .from('user_domains')
+    .insert([{ user_email: email, domain_type: domainType, domain_value: domainValue }]);
 
-    const insertQuery = `
-      INSERT INTO user_domains (user_email, domain_type, domain_value)
-      VALUES (?, ?, ?)
-    `;
-    db.run(insertQuery, [email, domainType, domainValue], function (err) {
-      if (err) {
-        console.error('❌ Failed to insert domain info:', err.message);
-      } else {
-        console.log(`✅ Domain info saved: ${email} => ${domainType} => ${domainValue}`);
-      }
-    });
-  });
+  if (insertError) {
+    console.error('❌ Failed to insert domain:', insertError.message);
+  } else {
+    console.log(`✅ Domain saved: ${domainValue} (${domainType}) for ${email}`);
+  }
 }
 
 // Get all domains for a user
-function getDomainsForUser(email, callback) {
-  const query = `SELECT domain_type, domain_value FROM user_domains WHERE user_email = ?`;
-  db.all(query, [email], (err, rows) => {
-    if (err) {
-      console.error('❌ Error fetching domains:', err.message);
-      return callback(err);
-    }
-    callback(null, rows);
-  });
+async function getDomainsForUser(email) {
+  const { data, error } = await supabase
+    .from('user_domains')
+    .select('domain_type, domain_value')
+    .eq('user_email', email);
+
+  if (error) {
+    console.error('❌ Failed to fetch domains:', error.message);
+    return [];
+  }
+
+  return data;
 }
 
 module.exports = { saveUserDomain, getDomainsForUser };

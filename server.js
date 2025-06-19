@@ -128,7 +128,6 @@ app.post('/save-domain', async (req, res) => {
   await saveUserDomain(email, type, domain);
   res.send('✅ Domain saved!');
 });
-
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-});
+});  // ✅ Correct semicolon

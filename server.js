@@ -19,7 +19,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-require('./auth')(passport);
+require('./auth');
 
 // Home route
 app.get('/', (req, res) => {

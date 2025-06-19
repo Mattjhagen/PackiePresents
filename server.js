@@ -1,32 +1,23 @@
-const express = require('express');
-const axios = require('axios');
-const passport = require('passport');
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const { saveUserDomain } = require('./saveDomain');
-require('dotenv').config();
+import express from 'express';
+import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
+import axios from 'axios';
+import { supabase } from './supabaseClient.js';
+import { saveUserDomain } from './saveDomain.js';
+
+dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 3000;
+
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'keyboardcat',
-  resave: false,
-  saveUninitialized: false
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-require('./auth')(passport);
-
-// Home route
 app.get('/', (req, res) => {
-  res.send('🧠 Resume Parser API is live!');
+  res.send('✅ Supabase Resume App is running!');
 });
 
-// Resume parser route
+// Resume Parser Endpoint
 app.post('/parse-resume', async (req, res) => {
   try {
     const resumeText = req.body.resumeText;
@@ -36,60 +27,39 @@ app.post('/parse-resume', async (req, res) => {
       {
         model: 'gpt-4',
         messages: [
-          {
-            role: 'system',
-            content: 'You are an expert resume formatter. Format the given resume into a clean, professional personal About Me page in HTML.'
-          },
-          {
-            role: 'user',
-            content: resumeText,
-          }
+          { role: 'system', content: 'You are an expert resume formatter. Format this resume into a clean HTML About Me page.' },
+          { role: 'user', content: resumeText }
         ],
         temperature: 0.5
       },
       {
         headers: {
-          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          'Content-Type': 'application/json'
         }
       }
     );
 
-    const formattedContent = response.data.choices[0].message.content;
+    const formatted = response.data.choices[0].message.content;
 
     const fullHTML = `
       <!DOCTYPE html>
-      <html lang="en">
+      <html>
       <head>
         <meta charset="UTF-8">
         <title>Your About Me Page</title>
         <style>
-          body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 2em; line-height: 1.6; }
-          h2 { margin-top: 2em; text-align: center; }
-          .cta { text-align: center; margin-top: 3em; }
-          a.cta-link {
-            display: inline-block;
-            text-decoration: none;
-            font-size: 1.1em;
-            color: #00ffff;
-            background: #000;
-            padding: 0.75em 1.5em;
-            border: 2px solid #00ffff;
-            border-radius: 8px;
-          }
-          a.cta-link:hover {
-            background: #00ffff;
-            color: #000;
-          }
+          body { font-family: sans-serif; padding: 2rem; max-width: 800px; margin: auto; }
+          .cta { margin-top: 3rem; text-align: center; }
+          .cta a { padding: 10px 20px; border: 2px solid #00ffff; color: #00ffff; text-decoration: none; border-radius: 8px; }
+          .cta a:hover { background-color: #00ffff; color: black; }
         </style>
       </head>
       <body>
-        ${formattedContent}
+        ${formatted}
         <div class="cta">
-          <h2>🔧 Claim Your Digital Presence</h2>
-          <a class="cta-link" href="/auth/google">
-            Sign in with Google to publish your page or upgrade with GSuite
-          </a>
+          <h2>🚀 Claim Your Digital Presence</h2>
+          <a href="/auth/supabase">Sign in with Google to publish your page or upgrade</a>
         </div>
       </body>
       </html>
@@ -98,35 +68,28 @@ app.post('/parse-resume', async (req, res) => {
     res.send(fullHTML);
   } catch (error) {
     console.error('❌ Error parsing resume:', error.message);
-    res.status(500).send('Failed to parse resume');
+    res.status(500).send('Failed to parse resume.');
   }
 });
 
-// Google OAuth
-app.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
+// Supabase OAuth Initiation
+app.get('/auth/supabase', async (req, res) => {
+  const redirectUrl = `${process.env.FRONTEND_URL}/auth/callback`; // Replace if needed
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: redirectUrl }
+  });
 
-app.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/' }),
-  (req, res) => {
-    const user = req.user;
-    const email = user.emails[0].value;
-    const subdomain = `${user.displayName.replace(/\s+/g, '').toLowerCase()}.pacmacmobile.com`;
-
-    // Save free subdomain on login
-    saveUserDomain(email, 'subdomain', subdomain);
-
-    res.redirect('/signup.html');
+  if (error) {
+    return res.status(500).send(`❌ OAuth error: ${error.message}`);
   }
-);
 
-// Include signup and dashboard routes
-require('./signupHandler')(app);
-require('./dashboardRoutes')(app);
+  res.redirect(data.url);
+});
 
-// Start server
-const PORT = process.env.PORT || 3001;
+// Optional: You can also handle Supabase POST-login routing if needed
+
+// Start the server
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });

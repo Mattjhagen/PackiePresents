@@ -2,23 +2,25 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { createClient } from '@supabase/supabase-js';
 import { saveUserDomain } from './saveDomain.js';
 import Stripe from 'stripe';
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_ANON_KEY
 );
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -94,65 +96,13 @@ app.post('/parse-resume', async (req, res) => {
     const data = await response.json();
     const formattedContent = data.choices?.[0]?.message?.content || 'No response from OpenAI.';
 
-    const email = req.body.email || 'anonymous';
-    const sanitized = email.split('@')[0].replace(/[^a-z0-9]/gi, '').toLowerCase();
+    const username = resumeText.split(/\s+/)[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+    const filename = path.join(__dirname, 'public', 'resumes', `${username}.html`);
 
-    const fullHTML = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Your About Me Page</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      max-width: 800px;
-      margin: auto;
-      padding: 2em;
-      line-height: 1.6;
-    }
-    h2 {
-      margin-top: 2em;
-      text-align: center;
-    }
-    .cta {
-      text-align: center;
-      margin-top: 3em;
-    }
-    a.cta-link {
-      display: inline-block;
-      text-decoration: none;
-      font-size: 1.1em;
-      color: #00ffff;
-      background: #000;
-      padding: 0.75em 1.5em;
-      border: 2px solid #00ffff;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    a.cta-link:hover {
-      background: #00ffff;
-      color: #000;
-    }
-  </style>
-</head>
-<body>
-  ${formattedContent}
-  <div class="cta">
-    <h2>🔧 Claim Your Digital Presence</h2>
-    <a class="cta-link" id="supabaseLogin">Sign in with Google via Supabase</a>
-  </div>
+    const fullHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${username}</title></head><body>${formattedContent}</body></html>`;
 
-  <script>
-    document.getElementById('supabaseLogin').addEventListener('click', function () {
-      window.location.href = '/login';
-    });
-  </script>
-</body>
-</html>`;
-
-    const outputPath = path.join(__dirname, 'public', 'resumes', `${sanitized}.html`);
-    await fs.writeFile(outputPath, fullHTML);
+    fs.mkdirSync(path.dirname(filename), { recursive: true });
+    fs.writeFileSync(filename, fullHTML);
 
     res.send(fullHTML);
   } catch (error) {
@@ -161,24 +111,46 @@ app.post('/parse-resume', async (req, res) => {
   }
 });
 
+app.get('/:username', (req, res, next) => {
+  const filePath = path.join(__dirname, 'public', 'resumes', `${req.params.username}.html`);
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    next();
+  }
+});
+
 app.post('/save-domain', async (req, res) => {
   const { email, type, domain } = req.body;
-
-  if (!email || !type || !domain) {
-    return res.status(400).send('Missing fields');
-  }
-
+  if (!email || !type || !domain) return res.status(400).send('Missing fields');
   await saveUserDomain(email, type, domain);
   res.send('✅ Domain saved!');
 });
 
-app.get('/:slug', async (req, res, next) => {
-  const filePath = path.join(__dirname, 'public', 'resumes', `${req.params.slug}.html`);
+app.post('/create-checkout-session', async (req, res) => {
   try {
-    await fs.access(filePath);
-    res.sendFile(filePath);
-  } catch {
-    next();
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      mode: 'payment',
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'Custom Domain + Google Suite Setup',
+            },
+            unit_amount: 1500,
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: `${process.env.PUBLIC_URL || 'https://packiepresents.onrender.com'}/success.html`,
+      cancel_url: `${process.env.PUBLIC_URL || 'https://packiepresents.onrender.com'}/signup.html`,
+    });
+    res.json({ url: session.url });
+  } catch (err) {
+    console.error('❌ Stripe error:', err.message);
+    res.status(500).json({ error: 'Stripe checkout failed' });
   }
 });
 

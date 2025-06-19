@@ -51,26 +51,37 @@ app.post('/parse-resume', async (req, res) => {
         <meta charset="UTF-8">
         <title>Your About Me Page</title>
         <style>
-          body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 2em; line-height: 1.6; }
-          h2 { margin-top: 2em; text-align: center; }
+          body {
+            font-family: sans-serif;
+            max-width: 800px;
+            margin: auto;
+            padding: 2em;
+            line-height: 1.6;
+            color: #ffffff;
+            background-color: #000000;
+          }
+          h1, h2, h3 {
+            color: #00ffff;
+          }
           a.cta-link {
             display: inline-block;
             margin-top: 1em;
             text-decoration: none;
             font-size: 1.1em;
-            color: #00ffff;
-            background: #000;
+            color: #000;
+            background: #00ffff;
             padding: 0.75em 1.5em;
-            border: 2px solid #00ffff;
             border-radius: 8px;
           }
           a.cta-link:hover {
-            background: #00ffff;
+            background: #ffffff;
             color: #000;
           }
           .cta {
             text-align: center;
             margin-top: 3em;
+            border-top: 1px solid #444;
+            padding-top: 2em;
           }
         </style>
       </head>

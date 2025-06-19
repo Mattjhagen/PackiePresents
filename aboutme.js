@@ -11,10 +11,18 @@ window.generateAboutPage = function () {
   reader.onload = function (event) {
     const resumeText = event.target.result;
 
-    document.getElementById('loadingBar').style.display = 'block';
-    document.getElementById('progressBar').style.width = '0%';
-    document.getElementById('loadingStatus').textContent = 'Generating... Stand by...';
+   await printLog('Uploading resume...');
+await printLog('Connecting to AI...');
 
+function printLog(line, delay = 500) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      terminal.textContent += `\n└─ $ ${line}`;
+      terminal.scrollTop = terminal.scrollHeight;
+      resolve();
+    }, delay);
+  });
+} 
     let width = 0;
     const interval = setInterval(() => {
       if (width >= 100) {
@@ -24,7 +32,9 @@ window.generateAboutPage = function () {
         document.getElementById('progressBar').style.width = width + '%';
       }
     }, 80);
-
+    
+await printLog('Sending to OpenAI...');
+    
     fetch("https://packiepresents.onrender.com/parse-resume", {
       method: "POST",
       headers: {
@@ -41,6 +51,8 @@ window.generateAboutPage = function () {
   const supabase = createClient(
     'https://qaegmajxjdfqtispqdnt.supabase.co',
     'YOUR_PUBLIC_ANON_KEY' // Replace this!
+    await printLog('✅ Resume parsed!');
+await printLog('Opening preview...');
   );
 
   const { data: { user } } = await supabase.auth.getUser();
@@ -64,6 +76,7 @@ window.generateAboutPage = function () {
         console.error('Failed to generate page:', err);
         document.getElementById('loadingStatus').textContent = '❌ Something went wrong.';
         alert('Something went wrong. Try again.');
+  await printLog(`❌ Error: ${err.message}`);
       });
   };
 

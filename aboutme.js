@@ -6,7 +6,7 @@ window.generateAboutPage = async function () {
   const file = document.getElementById('resumeUpload').files[0];
   const terminalBox = document.getElementById('terminalBox');
   const terminal = document.getElementById('terminalOutput');
-
+const { data: { user } } = await supabase.auth.getUser();
   if (!file) {
     alert('Please upload a resume!');
     return;

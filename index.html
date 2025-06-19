@@ -112,5 +112,35 @@
 </footer>
 
 <script src="aboutme.js"></script>
+  <div id="terminalWrapper">
+  <pre id="terminalOutput">┌─[packie@resume-gen]─[~]</pre><span id="cursor">█</span>
+</div>
+
+<style>
+  #terminalWrapper {
+    background-color: #0f0f0f;
+    color: #00ffcc;
+    font-family: monospace;
+    padding: 1.5em;
+    margin-top: 2em;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 2px solid #00ffcc;
+    border-radius: 10px;
+    position: relative;
+    white-space: pre-wrap;
+  }
+
+  #cursor {
+    display: inline-block;
+    color: #00ffcc;
+    animation: blink 1s step-start infinite;
+    font-weight: bold;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+</style>
 </body>
 </html>

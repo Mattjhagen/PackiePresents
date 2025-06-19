@@ -2,7 +2,6 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const fetch = require('node-fetch'); // Ensure this is installed
 const { saveUserDomain } = require('./saveDomain.js');
 
 dotenv.config();
@@ -17,6 +16,7 @@ app.get('/', (req, res) => {
   res.send('🚀 Supabase OAuth and Resume Parser backend running!');
 });
 
+// Continue with your /parse-resume and other routes
 app.post('/parse-resume', async (req, res) => {
   try {
     const resumeText = req.body.resumeText;

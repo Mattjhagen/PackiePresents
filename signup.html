@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Sign Up for Your Site</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
       font-family: sans-serif;
       max-width: 600px;
       margin: auto;
       padding: 2em;
+      background: #111;
+      color: #eee;
     }
     input, select, button {
       display: block;
@@ -17,127 +19,56 @@
       width: 100%;
       padding: 0.5em;
     }
+    .success {
+      color: #00ff00;
+      text-align: center;
+      margin-top: 2em;
+    }
   </style>
 </head>
 <body>
   <h1>Claim Your Digital Space</h1>
-  <form id="signupForm">
-    <input type="text" id="name" placeholder="Your Name" required>
-    <input type="email" id="email" placeholder="Your Email" required>
-    <select id="plan">
-      <option value="free">Free Subdomain (yourname.pacmacmobile.com)</option>
-      <option value="paid">Paid Hosting with Custom Domain + Google Suite</option>
-    </select>
-    <button type="submit">Sign Up</button>
-  </form>
-  <p id="message"></p>
+  <p id="message">Checking your Supabase session...</p>
 
-  <script>
-    document.getElementById('signupForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const plan = document.getElementById('plan').value;
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-      const response = await fetch('https://packiepresents.onrender.com/signup', {
+    const supabase = createClient(
+      'https://qaegmajxjdfqtispqdnt.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFhZWdtYWp4amRmcXRpc3BxZG50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAzMDk2OTUsImV4cCI6MjA2NTg4NTY5NX0.DmO2FMufZ7LBVY3nVOv0r0P7HuD4kvgKjBy8cC-MjJw'
+    );
+
+    const { data: { session }, error } = await supabase.auth.getSession();
+
+    if (!session?.user) {
+      document.getElementById('message').textContent = '⚠️ Not signed in. Redirecting to login...';
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 1500);
+    } else {
+      const email = session.user.email;
+      const name = session.user.user_metadata?.name || email.split('@')[0];
+      const subdomain = `${name.replace(/\s+/g, '').toLowerCase()}.pacmacmobile.com`;
+
+      const response = await fetch('/save-domain', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, plan })
+        body: JSON.stringify({
+          email,
+          type: 'subdomain',
+          domain: subdomain
+        })
       });
 
-      const message = await response.text();
-      document.getElementById('message').innerText = message;
-    });
-  </script>
-  <script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+      const msg = await response.text();
 
-  const supabase = createClient(
-    'https://qaegmajxjdfqtispqdnt.supabase.co', // 🔁 use your real URL
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFhZWdtYWp4amRmcXRpc3BxZG50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAzMDk2OTUsImV4cCI6MjA2NTg4NTY5NX0.DmO2FMufZ7LBVY3nVOv0r0P7HuD4kvgKjBy8cC-MjJw'
-  );
-
-  const { data: session } = await supabase.auth.getSession();
-
-  if (session?.session?.user) {
-    const user = session.session.user;
-    const email = user.email;
-    const sanitized = email.split('@')[0];
-
-    // Decide plan based on URL or sessionStorage (or fetch it from DB)
-    const plan = 'free';
-    const domainType = plan === 'paid' ? 'custom' : 'subdomain';
-    const domain = plan === 'paid'
-      ? `${sanitized}.com`
-      : `${sanitized}.pacmacmobile.com`;
-
-    fetch('/save-domain', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, type: domainType, domain })
-    })
-    .then(res => res.text())
-    .then(msg => {
-      console.log('✅ Save response:', msg);
-      document.body.innerHTML += `<p style="text-align:center;margin-top:2em;color:green">${msg}</p>`;
-    })
-    .catch(err => {
-      console.error('❌ Failed to save domain:', err);
-    });
-  } else {
-    console.warn('⚠️ Not logged in. Redirecting...');
-    window.location.href = '/login';
-  }
-</script>
-  <script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-
-  const supabase = createClient(
-    'https://YOUR_PROJECT_ID.supabase.co',
-    'YOUR_PUBLIC_ANON_KEY'
-  );
-
-  async function autoSaveDomain() {
-    const {
-      data: { session },
-      error
-    } = await supabase.auth.getSession();
-
-    if (error || !session?.user) {
-      console.warn('⚠️ No Supabase session found. Redirecting...');
-      window.location.href = '/login';
-      return;
+      document.getElementById('message').innerHTML = `
+        <div class="success">
+          ✅ ${msg}<br/>
+          🌐 <a href="https://${subdomain}" target="_blank">Visit Your New Site</a>
+        </div>
+      `;
     }
-
-    const email = session.user.email;
-    const name = session.user.user_metadata?.name || email.split('@')[0];
-    const sanitized = name.replace(/\s+/g, '').toLowerCase();
-    const subdomain = `${sanitized}.pacmacmobile.com`;
-
-    const response = await fetch('/save-domain', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email,
-        type: 'subdomain',
-        domain: subdomain
-      })
-    });
-
-    const msg = await response.text();
-    console.log('✅ Save response:', msg);
-
-    document.body.innerHTML += `
-      <p style="text-align:center;margin-top:2em;color:#00ff00;">
-        Your subdomain <strong>${subdomain}</strong> has been saved!
-      </p>
-      <p style="text-align:center;">
-        <a href="https://${subdomain}" target="_blank">Visit Your Live Page</a>
-      </p>
-    `;
-  }
-
-  autoSaveDomain();
-</script>
+  </script>
 </body>
 </html>

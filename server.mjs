@@ -95,7 +95,61 @@ app.post('/parse-resume', async (req, res) => {
 
     const data = await response.json();
     const formattedContent = data.choices?.[0]?.message?.content || 'No response from OpenAI.';
+const fullHTML = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your About Me Page</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #111;
+      color: #eee;
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #00ffff;
+    }
+    a {
+      color: #00ffff;
+    }
+    .cta {
+      text-align: center;
+      margin-top: 3em;
+    }
+    .cta-link {
+      display: inline-block;
+      padding: 0.75em 1.5em;
+      background: #000;
+      color: #00ffff;
+      border: 2px solid #00ffff;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s ease-in-out;
+      font-size: 1.1em;
+    }
+    .cta-link:hover {
+      background: #00ffff;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  ${formattedContent}
 
+  <div class="cta">
+    <h2>🔧 Claim Your Digital Presence</h2>
+    <a class="cta-link" href="/login" target="_blank" rel="noopener">
+      Sign in with Google via Supabase
+    </a>
+  </div>
+</body>
+</html>
+`;
     const username = resumeText.split(/\s+/)[0].toLowerCase().replace(/[^a-z0-9]/g, '');
     const filename = path.join(__dirname, 'public', 'resumes', `${username}.html`);
 

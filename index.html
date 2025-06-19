@@ -95,10 +95,10 @@
   <input type="file" id="resumeUpload" accept=".txt"><br>
   <button onclick="generateAboutPage()">Generate My About Me Page</button>
 
-  <div id="loadingBar" style="display:none; margin-top:1em;">
-    <div id="progressBar" style="width:0%; height:10px; background:#00ff99;"></div>
-    <p id="loadingStatus">Generating... Stand by...</p>
-  </div>
+<div id="terminalBox" style="display:none; background:#000; color:#0f0; font-family:monospace; padding:1em; border-radius:8px; margin-top:1em; height:200px; overflow:auto;">
+  <pre id="terminalOutput">┌─[resume@parser]─[$] Initializing...\n</pre>
+</div>
+  
 </section>
 
 <section id="support">

@@ -2,24 +2,46 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
-// Connect to DB
 const dbPath = path.resolve(__dirname, 'domains.db');
 const db = new sqlite3.Database(dbPath);
 
-// Function to save user domain info
+// Save domain with duplicate check
 function saveUserDomain(email, domainType, domainValue) {
-  const query = `
-    INSERT INTO user_domains (user_email, domain_type, domain_value)
-    VALUES (?, ?, ?)
+  const checkQuery = `
+    SELECT * FROM user_domains WHERE user_email = ? AND domain_value = ?
   `;
-  
-  db.run(query, [email, domainType, domainValue], function(err) {
+  db.get(checkQuery, [email, domainValue], (err, row) => {
     if (err) {
-      console.error('❌ Failed to insert domain info:', err.message);
-    } else {
-      console.log(`✅ Domain info saved: ${email} => ${domainType} => ${domainValue}`);
+      return console.error('❌ Error checking domain:', err.message);
     }
+    if (row) {
+      return console.log(`⚠️ Domain already exists for ${email}: ${domainValue}`);
+    }
+
+    const insertQuery = `
+      INSERT INTO user_domains (user_email, domain_type, domain_value)
+      VALUES (?, ?, ?)
+    `;
+    db.run(insertQuery, [email, domainType, domainValue], function (err) {
+      if (err) {
+        console.error('❌ Failed to insert domain info:', err.message);
+      } else {
+        console.log(`✅ Domain info saved: ${email} => ${domainType} => ${domainValue}`);
+      }
+    });
   });
 }
 
-module.exports = { saveUserDomain };
+// Get all domains for a user
+function getDomainsForUser(email, callback) {
+  const query = `SELECT domain_type, domain_value FROM user_domains WHERE user_email = ?`;
+  db.all(query, [email], (err, rows) => {
+    if (err) {
+      console.error('❌ Error fetching domains:', err.message);
+      return callback(err);
+    }
+    callback(null, rows);
+  });
+}
+
+module.exports = { saveUserDomain, getDomainsForUser };

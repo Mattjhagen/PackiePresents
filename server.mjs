@@ -140,6 +140,25 @@ const fullHTML = `
 </head>
 <body>
   ${formattedContent}
+  
+  app.post('/save-resume', async (req, res) => {
+  const { email, html } = req.body;
+
+  if (!email || !html) {
+    return res.status(400).send('Missing email or HTML content');
+  }
+
+  const { error } = await supabase
+    .from('resume_pages')
+    .insert([{ email, html }]);
+
+  if (error) {
+    console.error('❌ Supabase insert error:', error.message);
+    return res.status(500).send('Error saving resume');
+  }
+
+  res.send('✅ Resume saved!');
+});
 
   <div class="cta">
     <h2>🔧 Claim Your Digital Presence</h2>

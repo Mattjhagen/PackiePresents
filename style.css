@@ -111,4 +111,9 @@ a:hover {
   margin-top: 10px;
   color: #00ff99;
   font-weight: bold;
+
+  @keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
 }

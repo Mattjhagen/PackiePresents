@@ -4,10 +4,13 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import { createClient } from '@supabase/supabase-js';
 import { saveUserDomain } from './saveDomain.js'; // Note the .js extension!
+import Stripe from 'stripe';
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -147,6 +150,41 @@ app.post('/save-domain', async (req, res) => {
   await saveUserDomain(email, type, domain);
   res.send('✅ Domain saved!');
 });
+
+// Stripe Checkout session route
+app.post('/create-checkout-session', async (req, res) => {
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      mode: 'payment',
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'Custom Domain + Google Suite Setup',
+            },
+            unit_amount: 1500, // $15.00
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: `${process.env.PUBLIC_URL || 'https://packiepresents.onrender.com'}/success.html`,
+      cancel_url: `${process.env.PUBLIC_URL || 'https://packiepresents.onrender.com'}/signup.html`,
+    });
+
+    res.json({ url: session.url });
+  } catch (err) {
+    console.error('❌ Stripe error:', err.message);
+    res.status(500).json({ error: 'Stripe checkout failed' });
+  }
+});
+
+// 🔻 Keep this as-is
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
+
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);

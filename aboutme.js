@@ -28,7 +28,7 @@ function generateAboutPage() {
   headers: {
     "Content-Type": "application/json"
   },
-  body: JSON.stringify({ resumeText:  })
+  body: JSON.stringify({ resumeText  })
 })
       .then(res => {
         if (!res.ok) throw new Error(`Server error: ${res.status}`);

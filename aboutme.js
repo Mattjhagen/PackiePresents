@@ -13,8 +13,8 @@ window.generateAboutPage = async function () {
   function printLog(line, delay = 500) {
     return new Promise(resolve => {
       setTimeout(() => {
-        const textNode = document.createTextNode(`\n└─ $ ${line}`);
-        terminal.insertBefore(textNode, cursor);
+        const newLine = document.createTextNode(`\n└─ $ ${line}`);
+        terminal.appendChild(newLine);
         terminal.scrollTop = terminal.scrollHeight;
         resolve();
       }, delay);
@@ -26,15 +26,7 @@ window.generateAboutPage = async function () {
     const resumeText = event.target.result;
 
     await printLog('📄 Uploading resume...');
-    await printLog('🧠 Connecting to AI...');
-
-    const interval = setInterval(() => {
-      const bar = document.getElementById('progressBar');
-      if (!bar) return;
-      let width = parseInt(bar.style.width || '0');
-      if (width >= 100) clearInterval(interval);
-      else bar.style.width = (width + 5) + '%';
-    }, 80);
+    await printLog('🔌 Connecting to OpenAI...');
 
     await printLog('📤 Sending to OpenAI...');
 
@@ -55,7 +47,7 @@ window.generateAboutPage = async function () {
         'YOUR_PUBLIC_ANON_KEY'
       );
 
-      await printLog('✅ Resume parsed!');
+      await printLog('✅ Resume parsed successfully!');
 
       const { data: { user } } = await supabase.auth.getUser();
 
@@ -65,18 +57,20 @@ window.generateAboutPage = async function () {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: user.email, html: data })
         });
+
+        await printLog(`💾 Resume saved for ${user.email}`);
+      } else {
+        await printLog(`⚠️ User not logged in; skipping save.`);
       }
 
-      await printLog('🔓 Opening preview...');
+      await printLog('🚀 Opening preview page...');
 
       const blob = new Blob([data], { type: 'text/html' });
       const url = URL.createObjectURL(blob);
-      document.getElementById('loadingStatus').textContent = '✅ Success! Opening your page...';
       window.open(url, '_blank');
 
     } catch (err) {
-      console.error('Failed to generate page:', err);
-      document.getElementById('loadingStatus').textContent = '❌ Something went wrong.';
+      console.error('❌ Failed:', err);
       await printLog(`❌ Error: ${err.message}`);
       alert('Something went wrong. Try again.');
     }

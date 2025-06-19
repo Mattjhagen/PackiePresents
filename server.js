@@ -1,9 +1,9 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import { createClient } from '@supabase/supabase-js';
-import { saveUserDomain } from './saveDomain.js';
+const express = require('express');
+const dotenv = require('dotenv');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const { createClient } = require('@supabase/supabase-js');
+const { saveUserDomain } = require('./saveDomain');
 
 dotenv.config();
 const app = express();
@@ -39,12 +39,10 @@ app.get('/login', async (req, res) => {
   res.redirect(data.url);
 });
 
-// Supabase OAuth callback (handled by frontend auth)
 app.get('/callback', (req, res) => {
   res.redirect('/signup.html');
 });
 
-// Resume Parser Route
 app.post('/parse-resume', async (req, res) => {
   try {
     const resumeText = req.body.resumeText;
@@ -117,7 +115,7 @@ app.post('/parse-resume', async (req, res) => {
   }
 });
 
-// Example route to save domain after login (call from frontend if needed)
+// Save domain route
 app.post('/save-domain', async (req, res) => {
   const { email, type, domain } = req.body;
 
@@ -128,6 +126,7 @@ app.post('/save-domain', async (req, res) => {
   await saveUserDomain(email, type, domain);
   res.send('✅ Domain saved!');
 });
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-});  // ✅ Correct semicolon
+});

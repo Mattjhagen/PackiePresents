@@ -1,22 +1,50 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const { saveUserDomain } = require('./saveDomain.js');
-const signupHandler = require('./signupHandler.js'); // <-- make sure this file exists
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import { createClient } from '@supabase/supabase-js';
+import { saveUserDomain } from './saveDomain.js';
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  res.send('🚀 Supabase OAuth and Resume Parser backend running!');
+  res.send('🚀 Supabase OAuth + Resume Parser API running!');
 });
 
+// Route to trigger Supabase OAuth (Google)
+app.get('/login', async (req, res) => {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: 'https://packiepresents.onrender.com/callback'
+    }
+  });
+
+  if (error) {
+    return res.status(500).send('Auth error');
+  }
+
+  res.redirect(data.url); // Supabase login redirect
+});
+
+// Callback route after Supabase OAuth
+app.get('/callback', async (req, res) => {
+  // The token will be handled by Supabase client on the frontend.
+  res.redirect('/signup.html');
+});
+
+// Resume parser route
 app.post('/parse-resume', async (req, res) => {
   try {
     const resumeText = req.body.resumeText;
@@ -25,14 +53,14 @@ app.post('/parse-resume', async (req, res) => {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         model: 'gpt-4',
         messages: [
           {
             role: 'system',
-            content: 'You are an expert resume formatter. Format the given resume into a clean, professional personal About Me page in HTML.'
+            content: 'You are an expert resume formatter. Format the resume into a professional About Me HTML page.'
           },
           {
             role: 'user',
@@ -76,9 +104,7 @@ app.post('/parse-resume', async (req, res) => {
         ${formattedContent}
         <div class="cta">
           <h2>🔧 Claim Your Digital Presence</h2>
-          <a class="cta-link" href="/auth/supabase">
-            Sign in with Google to publish your page or upgrade with GSuite
-          </a>
+          <a class="cta-link" href="/login">Sign in with Google via Supabase</a>
         </div>
       </body>
       </html>
@@ -86,15 +112,11 @@ app.post('/parse-resume', async (req, res) => {
 
     res.send(fullHTML);
   } catch (error) {
-    console.error('❌ Error parsing resume:', error.message);
-    res.status(500).send('Failed to parse resume.');
+    console.error('❌ Resume error:', error.message);
+    res.status(500).send('Error parsing resume.');
   }
 });
 
-// ✅ Add signup handler so /signup POST works
-signupHandler(app);
-
-// ✅ Start listening
 app.listen(PORT, () => {
-  console.log(`🚀 Server is live at https://packiepresents.onrender.com`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });

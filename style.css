@@ -100,6 +100,11 @@ a:hover {
   background-color: #00ff99;
   transition: width 0.3s ease;
 }
+#terminalBox {
+  box-shadow: 0 0 10px #00ffcc;
+  background: #111;
+  color: #0f0;
+}
 
 /* Success Message */
 #loadingStatus {

@@ -91,7 +91,8 @@ app.post('/parse-resume', async (req, res) => {
     res.status(500).send('Failed to parse resume.');
   }
 });
+console.log(`🚀 Server is live at https://packiepresents.onrender.com`);
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+  
 });

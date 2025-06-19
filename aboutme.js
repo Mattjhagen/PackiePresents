@@ -1,4 +1,5 @@
 console.log('✅ aboutme.js loaded');
+
 window.generateAboutPage = function () {
   const file = document.getElementById('resumeUpload').files[0];
   if (!file) {
@@ -25,12 +26,12 @@ window.generateAboutPage = function () {
     }, 80);
 
     fetch("https://packiepresents.onrender.com/parse-resume", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({ resumeText  })
-})
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ resumeText })
+    })
       .then(res => {
         if (!res.ok) throw new Error(`Server error: ${res.status}`);
         return res.text();
@@ -40,7 +41,7 @@ window.generateAboutPage = function () {
         const url = URL.createObjectURL(blob);
         document.getElementById('loadingStatus').textContent = '✅ Success! Opening your page...';
         window.open(url, '_blank');
-        
+      })
       .catch(err => {
         console.error('Failed to generate page:', err);
         document.getElementById('loadingStatus').textContent = '❌ Something went wrong.';
@@ -49,4 +50,4 @@ window.generateAboutPage = function () {
   };
 
   reader.readAsText(file);
-}
+};

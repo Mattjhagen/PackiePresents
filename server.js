@@ -91,6 +91,10 @@ app.get('/auth/google/callback',
 const signupRoute = require('./signupHandler');
 signupRoute(app);
 
+// Add Dashboard
+const dashboardRoutes = require('./dashboardRoutes');
+dashboardRoutes(app);
+
 const authSignup = require('./authSignup');
 authSignup(app);
 

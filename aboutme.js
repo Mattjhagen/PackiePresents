@@ -37,6 +37,13 @@ window.generateAboutPage = async function () {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ resumeText }),
+        
+        await fetch("https://packiepresents.onrender.com/save-resume", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ email: user.email, html: data })
+});
+
       });
 
       if (!res.ok) throw new Error(`Server error: ${res.status}`);

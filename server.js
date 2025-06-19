@@ -1,22 +1,32 @@
 const express = require('express');
 const axios = require('axios');
+const passport = require('passport');
+const session = require('express-session');
 const bodyParser = require('body-parser');
-const fs = require('fs');
-const path = require('path');
+const { saveUserDomain } = require('./saveDomain');
 require('dotenv').config();
 
 const app = express();
 app.use(bodyParser.json());
-app.use(express.static('public')); // Serve static files if needed
+app.use(express.static('public'));
 
-// Ensure /data directory exists for SQLite
-const dataDir = path.dirname(process.env.DB_PATH || '/data/domains.db');
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
-  console.log(`📁 Created data directory at ${dataDir}`);
-}
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'keyboardcat',
+  resave: false,
+  saveUninitialized: false
+}));
 
-// GPT API Resume Parser
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./auth')(passport);
+
+// Home route
+app.get('/', (req, res) => {
+  res.send('🧠 Resume Parser API is live!');
+});
+
+// Resume parser route
 app.post('/parse-resume', async (req, res) => {
   try {
     const resumeText = req.body.resumeText;
@@ -28,36 +38,24 @@ app.post('/parse-resume', async (req, res) => {
         messages: [
           {
             role: 'system',
-            content:
-              'You are an expert resume formatter. Format the given resume into a clean, professional personal webpage. Include headings like About Me, Experience, Skills, and Education.',
+            content: 'You are an expert resume formatter. Format the given resume into a clean, professional personal About Me page in HTML.'
           },
           {
             role: 'user',
             content: resumeText,
-          },
+          }
         ],
-        temperature: 0.3,
+        temperature: 0.5
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
           'Content-Type': 'application/json',
-        },
+        }
       }
     );
 
     const formattedContent = response.data.choices[0].message.content;
-
-    const ctaHTML = `
-      <hr>
-      <div style="text-align:center; margin-top:2em;">
-        <h2>🔧 Claim Your Digital Presence</h2>
-        <a href="/auth/signup/google"
-           style="font-size:1.2em; text-decoration:none; color:#00ffcc;">
-          👉 Sign in with Google to publish your page on a free subdomain or upgrade with GSuite
-        </a>
-      </div>
-    `;
 
     const fullHTML = `
       <!DOCTYPE html>
@@ -67,10 +65,10 @@ app.post('/parse-resume', async (req, res) => {
         <title>Your About Me Page</title>
         <style>
           body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 2em; line-height: 1.6; }
-          h2 { text-align: center; }
+          h2 { margin-top: 2em; text-align: center; }
+          .cta { text-align: center; margin-top: 3em; }
           a.cta-link {
             display: inline-block;
-            margin-top: 1em;
             text-decoration: none;
             font-size: 1.1em;
             color: #00ffff;
@@ -87,34 +85,45 @@ app.post('/parse-resume', async (req, res) => {
       </head>
       <body>
         ${formattedContent}
-        ${ctaHTML}
+        <div class="cta">
+          <h2>🔧 Claim Your Digital Presence</h2>
+          <a class="cta-link" href="/auth/google">
+            Sign in with Google to publish your page or upgrade with GSuite
+          </a>
+        </div>
       </body>
       </html>
     `;
 
-    res.send({ html: fullHTML });
+    res.send(fullHTML);
   } catch (error) {
     console.error('❌ Error parsing resume:', error.message);
     res.status(500).send('Failed to parse resume');
   }
 });
 
-// OAuth (Google)
-const passport = require('passport');
-require('./auth');
-app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
-app.use(passport.initialize());
-app.use(passport.session());
+// Google OAuth
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
 
-// Google OAuth routes
-const authSignup = require('./authSignup');
-authSignup(app);
+app.get('/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+    const user = req.user;
+    const email = user.emails[0].value;
+    const subdomain = `${user.displayName.replace(/\s+/g, '').toLowerCase()}.pacmacmobile.com`;
 
-// Signup & dashboard
-const signupRoute = require('./signupHandler');
-const dashboardRoutes = require('./dashboardRoutes');
-signupRoute(app);
-dashboardRoutes(app);
+    // Save free subdomain on login
+    saveUserDomain(email, 'subdomain', subdomain);
+
+    res.redirect('/signup.html');
+  }
+);
+
+// Include signup and dashboard routes
+require('./signupHandler')(app);
+require('./dashboardRoutes')(app);
 
 // Start server
 const PORT = process.env.PORT || 3001;

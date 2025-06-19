@@ -1,3 +1,4 @@
+console.log('✅ aboutme.js loaded');
 function generateAboutPage() {
   const file = document.getElementById('resumeUpload').files[0];
   if (!file) {

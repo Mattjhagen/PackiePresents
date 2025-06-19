@@ -89,5 +89,55 @@
     window.location.href = '/login';
   }
 </script>
+  <script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+  const supabase = createClient(
+    'https://YOUR_PROJECT_ID.supabase.co',
+    'YOUR_PUBLIC_ANON_KEY'
+  );
+
+  async function autoSaveDomain() {
+    const {
+      data: { session },
+      error
+    } = await supabase.auth.getSession();
+
+    if (error || !session?.user) {
+      console.warn('⚠️ No Supabase session found. Redirecting...');
+      window.location.href = '/login';
+      return;
+    }
+
+    const email = session.user.email;
+    const name = session.user.user_metadata?.name || email.split('@')[0];
+    const sanitized = name.replace(/\s+/g, '').toLowerCase();
+    const subdomain = `${sanitized}.pacmacmobile.com`;
+
+    const response = await fetch('/save-domain', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        type: 'subdomain',
+        domain: subdomain
+      })
+    });
+
+    const msg = await response.text();
+    console.log('✅ Save response:', msg);
+
+    document.body.innerHTML += `
+      <p style="text-align:center;margin-top:2em;color:#00ff00;">
+        Your subdomain <strong>${subdomain}</strong> has been saved!
+      </p>
+      <p style="text-align:center;">
+        <a href="https://${subdomain}" target="_blank">Visit Your Live Page</a>
+      </p>
+    `;
+  }
+
+  autoSaveDomain();
+</script>
 </body>
 </html>

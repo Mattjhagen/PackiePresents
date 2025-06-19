@@ -22,20 +22,22 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-app.get('/', (req, res) => {
-  res.send('🚀 Supabase OAuth + Resume Parser API running!');
-});
+app.get('/login/:provider', async (req, res) => {
+  const provider = req.params.provider;
 
-app.get('/login', async (req, res) => {
+  if (!provider) {
+    return res.status(400).send('❌ No provider specified');
+  }
+
   const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
+    provider,
     options: {
       redirectTo: `${process.env.PUBLIC_URL || 'https://packiepresents.onrender.com'}/callback`
     }
   });
 
   if (error || !data?.url) {
-    console.error('OAuth redirect error:', error?.message || 'No URL returned');
+    console.error(`❌ OAuth (${provider}) error:`, error?.message || 'No URL');
     return res.status(500).send('Auth error');
   }
 

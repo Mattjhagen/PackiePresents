@@ -1,14 +1,2 @@
-{
-  "name": "supabase-oauth-app",
-  "version": "1.0.0",
-  "type": "module",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.39.5",
-    "express": "^4.18.2",
-    "dotenv": "^16.3.1"
-  }
-}
+// package.json { "name": "packie-server", "version": "1.0.0", "type": "module", "description": "Backend for PacMacMobile using Supabase for auth and domain saving", "main": "server.js", "scripts": { "start": "node server.js" }, "dependencies": { "@supabase/supabase-js": "^2.39.5", "axios": "^1.6.7", "cors": "^2.8.5", "dotenv": "^16.3.1", "express": "^4.18.2" } }
+

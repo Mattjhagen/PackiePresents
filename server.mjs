@@ -114,7 +114,22 @@ app.post('/parse-resume', async (req, res) => {
     res.status(500).send('Error parsing resume.');
   }
 });
+app.post('/save-resume', async (req, res) => {
+  const { email, html } = req.body;
+  if (!email || !html) return res.status(400).send('Missing email or HTML');
 
+  const fs = await import('fs/promises');
+  const safeEmail = email.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+  const filePath = `./public/resumes/${safeEmail}.html`;
+
+  try {
+    await fs.writeFile(filePath, html, 'utf8');
+    res.send('✅ Resume saved');
+  } catch (err) {
+    console.error('❌ Failed to save resume:', err.message);
+    res.status(500).send('Error saving resume');
+  }
+});
 app.post('/save-domain', async (req, res) => {
   const { email, type, domain } = req.body;
   if (!email || !type || !domain) return res.status(400).send('Missing fields');

@@ -8,12 +8,10 @@ app.use(bodyParser.json());
 
 const apiKey = process.env.OPENAI_API_KEY;
 
-// Test route
 app.get('/', (req, res) => {
   res.send('Resume Parser API is live!');
 });
 
-// Resume parsing route
 app.post('/parse-resume', async (req, res) => {
   try {
     const resumeText = req.body.resumeText;
@@ -26,17 +24,9 @@ app.post('/parse-resume', async (req, res) => {
           {
             role: 'system',
             content: `
-You are a resume formatter. Convert plain text into a clean HTML layout.
-
-- Use semantic tags like <section>, <ul>, <li>, and <h2>
-- Structure: About Me, Skills, Experience, Education
-- Do NOT wrap output in Markdown or code blocks
-- Output only valid HTML content to embed inside <body>`
+You are a resume formatter. Convert plain text into clean HTML. Use <section>, <ul>, <li>, <h2>. Structure it: About Me, Skills, Experience, Education. No markdown.`
           },
-          {
-            role: 'user',
-            content: resumeText
-          }
+          { role: 'user', content: resumeText }
         ],
         temperature: 0.3
       },
@@ -66,12 +56,8 @@ You are a resume formatter. Convert plain text into a clean HTML layout.
       color: #eee;
       line-height: 1.6;
     }
-    h1, h2 {
-      color: #00ffff;
-    }
-    ul {
-      margin-left: 1.5rem;
-    }
+    h1, h2 { color: #00ffff; }
+    ul { margin-left: 1.5rem; }
     .cta {
       margin-top: 3em;
       text-align: center;
@@ -98,13 +84,12 @@ You are a resume formatter. Convert plain text into a clean HTML layout.
   ${formattedContent}
   <div class="cta">
     <h2>🔧 Claim Your Digital Presence</h2>
-    <a class="cta-link" href="https://packiepresents.onrender.com/auth/google">
+    <a class="cta-link" href="/auth/google">
       Sign in with Google to publish your page on a free subdomain or upgrade with GSuite
     </a>
   </div>
 </body>
-</html>
-    `;
+</html>`;
 
     res.send(fullHTML);
   } catch (error) {

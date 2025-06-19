@@ -1,6 +1,5 @@
 // saveDomain.js
-
-const { createClient } = require('@supabase/supabase-js');
+import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
@@ -11,9 +10,7 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Now use `supabase` to interact with your Supabase DB
-// Save domain
-async function saveUserDomain(email, domainType, domainValue) {
+export async function saveUserDomain(email, domainType, domainValue) {
   const { data, error: checkError } = await supabase
     .from('user_domains')
     .select('*')
@@ -35,8 +32,7 @@ async function saveUserDomain(email, domainType, domainValue) {
   }
 }
 
-// Get all domains for a user
-async function getDomainsForUser(email) {
+export async function getDomainsForUser(email) {
   const { data, error } = await supabase
     .from('user_domains')
     .select('domain_type, domain_value')
@@ -49,5 +45,3 @@ async function getDomainsForUser(email) {
 
   return data;
 }
-
-module.exports = { saveUserDomain, getDomainsForUser };

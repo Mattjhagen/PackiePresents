@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { saveUserDomain } = require('./saveDomain.js');
+const signupHandler = require('./signupHandler.js'); // <-- make sure this file exists
 
 dotenv.config();
 const app = express();
@@ -16,7 +17,6 @@ app.get('/', (req, res) => {
   res.send('🚀 Supabase OAuth and Resume Parser backend running!');
 });
 
-// Continue with your /parse-resume and other routes
 app.post('/parse-resume', async (req, res) => {
   try {
     const resumeText = req.body.resumeText;
@@ -85,14 +85,16 @@ app.post('/parse-resume', async (req, res) => {
     `;
 
     res.send(fullHTML);
-
   } catch (error) {
     console.error('❌ Error parsing resume:', error.message);
     res.status(500).send('Failed to parse resume.');
   }
 });
-console.log(`🚀 Server is live at https://packiepresents.onrender.com`);
 
+// ✅ Add signup handler so /signup POST works
+signupHandler(app);
+
+// ✅ Start listening
 app.listen(PORT, () => {
-  
+  console.log(`🚀 Server is live at https://packiepresents.onrender.com`);
 });

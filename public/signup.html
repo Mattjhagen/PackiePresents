@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign Up for Your Site</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 2em;
+      background: #111;
+      color: #eee;
+    }
+    input, select, button {
+      display: block;
+      margin-top: 1em;
+      width: 100%;
+      padding: 0.5em;
+    }
+    .success {
+      color: #00ff00;
+      text-align: center;
+      margin-top: 2em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Claim Your Digital Space</h1>
+  <p id="message">Checking your Supabase session...</p>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    const supabase = createClient(
+      'https://qaegmajxjdfqtispqdnt.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFhZWdtYWp4amRmcXRpc3BxZG50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAzMDk2OTUsImV4cCI6MjA2NTg4NTY5NX0.DmO2FMufZ7LBVY3nVOv0r0P7HuD4kvgKjBy8cC-MjJw'
+    );
+
+    const { data: { session }, error } = await supabase.auth.getSession();
+
+    if (!session?.user) {
+      document.getElementById('message').textContent = '⚠️ Not signed in. Redirecting to login...';
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 1500);
+    } else {
+      const email = session.user.email;
+      const name = session.user.user_metadata?.name || email.split('@')[0];
+      const subdomain = `${name.replace(/\s+/g, '').toLowerCase()}.pacmacmobile.com`;
+
+      const response = await fetch('/save-domain', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          type: 'subdomain',
+          domain: subdomain
+        })
+      });
+
+      const msg = await response.text();
+
+      document.getElementById('message').innerHTML = `
+        <div class="success">
+          ✅ ${msg}<br/>
+          🌐 <a href="https://${subdomain}" target="_blank">Visit Your New Site</a>
+        </div>
+      `;
+    }
+  </script>
+  <script type="module" src="postSignup.js"></script>
+</body>
+</html>

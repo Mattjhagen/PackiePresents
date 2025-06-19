@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to PacMac Mobile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: auto; padding: 2em; }
+    .user-info { background: #f0f0f0; padding: 1em; margin-bottom: 1em; border-radius: 6px; }
+    button, select { padding: 0.5em; width: 100%; margin-top: 1em; }
+  </style>
+</head>
+<body>
+  <h1>Welcome to PacMac Mobile</h1>
+  <div id="user" class="user-info">
+    <p><strong>Name:</strong> <span id="name">Loading...</span></p>
+    <p><strong>Email:</strong> <span id="email">Loading...</span></p>
+  </div>
+
+  <form id="planForm">
+    <label for="plan">Choose your plan:</label>
+    <select id="plan" required>
+      <option value="">--Select--</option>
+      <option value="free">Free Subdomain (yourname.pacmacmobile.com)</option>
+      <option value="paid">Paid + GSuite & custom domain</option>
+    </select>
+    <button type="submit">Continue</button>
+  </form>
+
+  <p id="message"></p>
+
+  <script>
+    // Fetch logged-in user
+    fetch('/api/me')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('name').innerText = data.name;
+        document.getElementById('email').innerText = data.email;
+      });
+
+    document.getElementById('planForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const plan = document.getElementById('plan').value;
+
+      const res = await fetch('/api/submit-plan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan })
+      });
+
+      const text = await res.text();
+      document.getElementById('message').innerText = text;
+    });
+  </script>
+</body>
+</html>

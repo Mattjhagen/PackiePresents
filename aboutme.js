@@ -39,14 +39,7 @@ function generateAboutPage() {
         const url = URL.createObjectURL(blob);
         document.getElementById('loadingStatus').textContent = '✅ Success! Opening your page...';
         window.open(url, '_blank');
-        setTimeout(() => {
-  const proceed = confirm("Want to publish your About Me page? Sign in with Google to choose your free subdomain or upgrade to a custom domain with email.");
-
-  if (proceed) {
-    window.location.href = '/auth/google';
-  }
-}, 1000);
-      })
+        
       .catch(err => {
         console.error('Failed to generate page:', err);
         document.getElementById('loadingStatus').textContent = '❌ Something went wrong.';

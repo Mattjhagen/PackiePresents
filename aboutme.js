@@ -32,10 +32,10 @@ function generateAboutPage() {
 })
       .then(res => {
         if (!res.ok) throw new Error(`Server error: ${res.status}`);
-        return res.json();
+        return res.text();
       })
       .then(data => {
-        const blob = new Blob([data.html], { type: 'text/html' });
+        const blob = new Blob([data], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
         document.getElementById('loadingStatus').textContent = '✅ Success! Opening your page...';
         window.open(url, '_blank');

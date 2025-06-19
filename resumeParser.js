@@ -25,7 +25,13 @@ app.post('/parse-resume', async (req, res) => {
         messages: [
           {
             role: 'system',
-            content: 'You are a resume formatter. Convert the raw resume text into clean, readable HTML with headings for About Me, Experience, Skills, and Education. Use simple, readable formatting.'
+            content: `You are a professional resume formatter. Take plain resume text and generate clean, styled HTML with semantic tags.
+
+Structure it as:
+- <h1> for the user's name
+- <section> with <h2> for each: About Me, Skills, Experience, and Education
+- Use <ul> and <li> for lists of skills/jobs/education
+Return only valid HTML markup (no backticks or Markdown).`
           },
           {
             role: 'user',

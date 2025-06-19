@@ -91,6 +91,9 @@ app.get('/auth/google/callback',
 const signupRoute = require('./signupHandler');
 signupRoute(app);
 
+const authSignup = require('./authSignup');
+authSignup(app);
+
 // Start server
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

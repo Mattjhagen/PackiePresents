@@ -49,5 +49,45 @@
       document.getElementById('message').innerText = message;
     });
   </script>
+  <script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+  const supabase = createClient(
+    'https://qaegmajxjdfqtispqdnt.supabase.co', // 🔁 use your real URL
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFhZWdtYWp4amRmcXRpc3BxZG50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAzMDk2OTUsImV4cCI6MjA2NTg4NTY5NX0.DmO2FMufZ7LBVY3nVOv0r0P7HuD4kvgKjBy8cC-MjJw'
+  );
+
+  const { data: session } = await supabase.auth.getSession();
+
+  if (session?.session?.user) {
+    const user = session.session.user;
+    const email = user.email;
+    const sanitized = email.split('@')[0];
+
+    // Decide plan based on URL or sessionStorage (or fetch it from DB)
+    const plan = 'free';
+    const domainType = plan === 'paid' ? 'custom' : 'subdomain';
+    const domain = plan === 'paid'
+      ? `${sanitized}.com`
+      : `${sanitized}.pacmacmobile.com`;
+
+    fetch('/save-domain', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, type: domainType, domain })
+    })
+    .then(res => res.text())
+    .then(msg => {
+      console.log('✅ Save response:', msg);
+      document.body.innerHTML += `<p style="text-align:center;margin-top:2em;color:green">${msg}</p>`;
+    })
+    .catch(err => {
+      console.error('❌ Failed to save domain:', err);
+    });
+  } else {
+    console.warn('⚠️ Not logged in. Redirecting...');
+    window.location.href = '/login';
+  }
+</script>
 </body>
 </html>

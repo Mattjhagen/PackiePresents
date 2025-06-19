@@ -86,9 +86,9 @@ You are a resume formatter. Convert plain text into clean HTML. Use <section>, <
   ${formattedContent}
   <div class="cta">
     <h2>🔧 Claim Your Digital Presence</h2>
-    <a class="cta-link" href="/login">
-      Sign in with Google to publish your page on a free subdomain or upgrade with GSuite
-    </a>
+<a class="cta-link" href="https://packiepresents.onrender.com/login" target="_blank" rel="noopener">
+  Sign in with Google via Supabase
+</a>
   </div>
 </body>
 </html>`;

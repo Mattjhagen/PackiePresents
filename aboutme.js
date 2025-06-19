@@ -1,5 +1,5 @@
 console.log('✅ aboutme.js loaded');
-function generateAboutPage() {
+window.generateAboutPage = function () {
   const file = document.getElementById('resumeUpload').files[0];
   if (!file) {
     alert('Please upload a resume!');

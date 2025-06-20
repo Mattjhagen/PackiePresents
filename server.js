@@ -1,9 +1,11 @@
+// server.js
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { createClient } = require('@supabase/supabase-js');
 const { saveUserDomain } = require('./saveDomain');
+const { validateResume, validateDomain } = require('./validators');
 
 dotenv.config();
 const app = express();
@@ -19,10 +21,9 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  res.send('🚀 Supabase OAuth + Resume Parser API running!');
+  res.send('Supabase OAuth + Resume Parser API running!');
 });
 
-// Supabase OAuth route
 app.get('/login', async (req, res) => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
@@ -43,7 +44,7 @@ app.get('/callback', (req, res) => {
   res.redirect('/signup.html');
 });
 
-app.post('/parse-resume', async (req, res) => {
+app.post('/parse-resume', validateResume, async (req, res) => {
   try {
     const resumeText = req.body.resumeText;
 
@@ -101,7 +102,7 @@ app.post('/parse-resume', async (req, res) => {
       <body>
         ${formattedContent}
         <div class="cta">
-          <h2>🔧 Claim Your Digital Presence</h2>
+          <h2>Claim Your Digital Presence</h2>
           <a class="cta-link" href="/login">Sign in with Google via Supabase</a>
         </div>
       </body>
@@ -109,24 +110,18 @@ app.post('/parse-resume', async (req, res) => {
     `;
 
     res.send(fullHTML);
-  } catch (error) {
-    console.error('❌ Resume error:', error.message);
+  } catch (err) {
+    console.error('Resume error:', err.message);
     res.status(500).send('Error parsing resume.');
   }
 });
 
-// Save domain route
-app.post('/save-domain', async (req, res) => {
+app.post('/save-domain', validateDomain, async (req, res) => {
   const { email, type, domain } = req.body;
-
-  if (!email || !type || !domain) {
-    return res.status(400).send('Missing fields');
-  }
-
   await saveUserDomain(email, type, domain);
-  res.send('✅ Domain saved!');
+  res.send('Domain saved!');
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

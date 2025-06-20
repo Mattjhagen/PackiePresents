@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PacMac Mobile - Web Design & VanLife</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="animated-portfolio.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+</head>
+<body>
+<header>
+  <img src="assets/PacMac_Banner_Mobile_5.PNG" alt="#VanLife Banner" />
+  <h1 class="typewriter">PacMac Mobile</h1>
+  <p>Web Design • Repairs • #VanLife</p>
+</header>
+
+<nav>
+  <p>
+    <a href="#about">About</a> •
+    <a href="#services">Services</a> •
+    <a href="#plans">Plans</a> •
+    <a href="#resume">Resume</a> •
+    <a href="#support">Support</a>
+  </p>
+</nav>
+
+<section id="about">
+  <h2>Who We Are</h2>
+  <img src="assets/MattnTerra.PNG" alt="Matt and Terra" style="border-radius:50%; width:150px;" />
+  <p>We’re Matt and Terra—partners in code, creativity, and coffee-fueled campfire chats.</p>
+</section>
+
+<section id="services">
+  <h2>Services We Offer</h2>
+  <ul>
+    <li>📱 Mobile repair (Apple & Android)</li>
+    <li>🧠 Web design & dev (HTML/CSS, WordPress)</li>
+    <li>🔒 Cybersecurity tools (Kali-friendly)</li>
+  </ul>
+</section>
+
+<section id="plans">
+  <h2>Choose Your Perfect Plan</h2>
+  <div class="plan" style="border-color:#00ff99">
+    <h3>Starter</h3>
+    <p>$3,499 upfront • $35/mo</p>
+    <ul><li>Mobile Responsive • CMS • SEO</li></ul>
+  </div>
+  <div class="plan" style="border-color:gold">
+    <h3>Professional</h3>
+    <p>$7,499 upfront • $129/mo</p>
+    <ul><li>HIPAA Security • Blog • Branding</li></ul>
+  </div>
+  <div class="plan" style="border-color:limegreen">
+    <h3>Enterprise</h3>
+    <p>$12,499 upfront • $350/mo</p>
+    <ul><li>Strategy • Analytics • Manager</li></ul>
+  </div>
+</section>
+
+<!-- LOGIN + UPLOAD -->
+<section class="cta">
+  <h2>🔐 Sign in to Generate Your Site</h2>
+  <button id="loginBtn" class="cta">Login with Google</button>
+</section>
+
+<section class="cta">
+  <h2>📄 Upload Your Resume</h2>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="resumeFile" accept=".pdf,.txt" required />
+    <input type="hidden" id="accessToken" name="accessToken" />
+    <button type="submit" class="cta">Upload & Generate Site</button>
+  </form>
+  <div id="uploadResult"></div>
+</section>
+
+<!-- Subdomain Claim -->
+<section id="domain-registration" style="display:none;">
+  <h2>🌍 Claim Your Custom Domain</h2>
+  <form onsubmit="register(event)">
+    <input type="text" id="domainInput" placeholder="yourname.com" />
+    <button type="submit" class="cta">Register Domain</button>
+  </form>
+  <pre id="domainResponse" style="color:lime;"></pre>
+</section>
+
+<!-- Terminal -->
+<div id="terminalWrapper">
+  <pre id="terminalOutput">┌─[packie@resume-gen]─[~]</pre><span id="cursor">█</span>
+</div>
+
+<!-- Chatbot -->
+<div id="chat-widget">
+  <textarea id="user-msg" placeholder="Ask Packie something..." rows="3"></textarea>
+  <button onclick="sendToPackie()">💬 Ask Packie</button>
+  <pre id="bot-reply"></pre>
+</div>
+
+<script>
+  const supabase = supabase.createClient('https://YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
+
+  document.getElementById('loginBtn')?.addEventListener('click', () => {
+    supabase.auth.signInWithOAuth({ provider: 'google' });
+  });
+
+  supabase.auth.getSession().then(({ data }) => {
+    const token = data?.session?.access_token;
+    if (token) document.getElementById('accessToken').value = token;
+  });
+
+  document.getElementById('uploadForm')?.addEventListener('submit', async e => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const token = formData.get('accessToken');
+    formData.delete('accessToken');
+
+    const res = await fetch('/upload-resume', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData
+    });
+
+    const result = await res.json();
+    document.getElementById('uploadResult').innerHTML = res.ok
+      ? `<a href="${result.previewUrl}" target="_blank">🌐 View Your Page</a>`
+      : `<pre>${JSON.stringify(result)}</pre>`;
+    document.getElementById('domain-registration').style.display = 'block';
+  });
+
+  async function sendToPackie() {
+    const message = document.getElementById('user-msg').value;
+    const res = await fetch('https://packiepresents.pages.dev/chat', {
+      method: 'POST',
+      body: JSON.stringify({ message }),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const data = await res.json();
+    document.getElementById('bot-reply').textContent = '┌─[packie@chatbot]─[~]\n' + data.reply;
+  }
+
+  async function register(e) {
+    e.preventDefault();
+    const domain = document.getElementById('domainInput').value;
+    const res = await fetch('/register-domain', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ domain }),
+    });
+    const data = await res.json();
+    document.getElementById('domainResponse').textContent = JSON.stringify(data, null, 2);
+  }
+</script>
+</body>
+</html>

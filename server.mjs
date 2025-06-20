@@ -4,38 +4,35 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import fs from 'fs';
 import path from 'path';
+import multer from 'multer';
 import { fileURLToPath } from 'url';
 import { createClient } from '@supabase/supabase-js';
 import { saveUserDomain } from './saveDomain.js';
 import { renderResumePage } from './utils/renderResumePage.js';
 import Stripe from 'stripe';
-import saveResumeHandler from './saveResumeHandler.js;
-const host = req.headers.host;
-const subdomain = host.split('.')[0];
-console.log('🧪 Host:', host, 'Subdomain:', subdomain);
+import fetch from 'node-fetch';
+
+// Config
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
-
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
-);
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+const upload = multer({ dest: 'uploads/' });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('public'));
-app.use(saveResumeHandler);
 
+// Dynamic subdomain rendering
 app.get('*', async (req, res) => {
   const host = req.headers.host;
   const subdomain = host.split('.')[0];
 
-  // Avoid serving resume for root or dev hosts
   if (!subdomain || ['www', 'localhost', 'pacmacmobile'].includes(subdomain)) {
     return res.send('🚀 Supabase OAuth + Resume Parser API running!');
   }
@@ -48,23 +45,13 @@ app.get('*', async (req, res) => {
     res.status(404).send(`<h2>❌ Resume not found for "${subdomain}"</h2>`);
   }
 });
+
+// OAuth login
 app.get('/login/:provider', async (req, res) => {
   const provider = req.params.provider;
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
-    options: {
-      redirectTo: `${process.env.PUBLIC_URL || 'https://packiepresents.onrender.com'}/callback`
-    }
-    
-    app.get('*', (req, res, next) => {
-  const host = req.headers.host; // e.g. 'john.yourdomain.com'
-  // extract subdomain: the part before your main domain
-  const subdomain = host.split('.')[0];
-  
-  // optional: validate it matches a saved record in your DB
-  // then pull resume HTML for that user and send it
-});
-
+    options: { redirectTo: `${process.env.PUBLIC_URL}/callback` }
   });
 
   if (error || !data?.url) {
@@ -75,31 +62,18 @@ app.get('/login/:provider', async (req, res) => {
   res.redirect(data.url);
 });
 
-app.get('/login', async (req, res) => {
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: `${process.env.PUBLIC_URL || 'https://packiepresents.onrender.com'}/callback`
-    }
-  });
-
-  if (error || !data?.url) {
-    console.error('OAuth redirect error:', error?.message || 'No URL returned');
-    return res.status(500).send('Auth error');
-  }
-
-  res.redirect(data.url);
-});
-
 app.get('/callback', (req, res) => {
   res.redirect('/signup.html');
 });
 
-app.post('/parse-resume', async (req, res) => {
+// Resume Upload -> Parse -> Save -> Redirect
+app.post('/upload', upload.single('resume'), async (req, res) => {
   try {
-    const resumeText = req.body.resumeText;
+    const filePath = path.resolve(req.file.path);
+    const resumeText = await fs.promises.readFile(filePath, 'utf-8');
+    const username = resumeText.split(/\s+/)[0].toLowerCase().replace(/[^a-z0-9]/g, '') + Date.now().toString().slice(-4);
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const gptRes = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
@@ -108,172 +82,26 @@ app.post('/parse-resume', async (req, res) => {
       body: JSON.stringify({
         model: 'gpt-4',
         messages: [
-          {
-            role: 'system',
-            content: 'You are an expert resume formatter. Format the resume into a professional About Me HTML page.'
-          },
-          {
-            role: 'user',
-            content: resumeText
-          }
-        ],
-        temperature: 0.5
+          { role: 'system', content: 'You are a resume-to-HTML formatter.' },
+          { role: 'user', content: resumeText }
+        ]
       })
     });
 
-    const data = await response.json();
-    const formattedContent = data.choices?.[0]?.message?.content || 'No response from OpenAI.';
-const fullHTML = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Your About Me Page</title>
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      background: #111;
-      color: #eee;
-      padding: 2rem;
-      max-width: 800px;
-      margin: auto;
-      line-height: 1.6;
-    }
-    h1, h2 {
-      color: #00ffff;
-    }
-    a {
-      color: #00ffff;
-    }
-    .cta {
-      text-align: center;
-      margin-top: 3em;
-    }
-    .cta-link {
-      display: inline-block;
-      padding: 0.75em 1.5em;
-      background: #000;
-      color: #00ffff;
-      border: 2px solid #00ffff;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: all 0.3s ease-in-out;
-      font-size: 1.1em;
-    }
-    .cta-link:hover {
-      background: #00ffff;
-      color: #000;
-    }
-  </style>
-</head>
-<body>
-  ${formattedContent}
-  
-  app.post('/save-resume', async (req, res) => {
-  const { email, html } = req.body;
+    const gptData = await gptRes.json();
+    const formattedContent = gptData.choices?.[0]?.message?.content || 'Error formatting resume.';
 
-const fullHTML = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Your About Me Page</title>
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      background: #111;
-      color: #eee;
-      padding: 2rem;
-      max-width: 800px;
-      margin: auto;
-      line-height: 1.6;
-    }
-    h1, h2 {
-      color: #00ffff;
-    }
-    a {
-      color: #00ffff;
-    }
-    .cta {
-      text-align: center;
-      margin-top: 3em;
-    }
-    .cta-link {
-      display: inline-block;
-      padding: 0.75em 1.5em;
-      background: #000;
-      color: #00ffff;
-      border: 2px solid #00ffff;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: all 0.3s ease-in-out;
-      font-size: 1.1em;
-    }
-    .cta-link:hover {
-      background: #00ffff;
-      color: #000;
-    }
-  </style>
-</head>
-<body>
-  ${formattedContent}
+    const { error } = await supabase.from('resume_pages').insert({
+      subdomain: username,
+      html: formattedContent
+    });
 
-  <div class="cta">
-    <h2>🔧 Claim Your Digital Presence</h2>
-    <a class="cta-link" href="/login" target="_blank" rel="noopener">
-      Sign in with Google via Supabase
-    </a>
-  </div>
-</body>
-</html>
-`;
-
-  if (!email || !html) {
-    return res.status(400).send('Missing email or HTML content');
-  }
-
-  const { error } = await supabase
-    .from('resume_pages')
-    .insert([{ email, html }]);
-
-  if (error) {
-    console.error('❌ Supabase insert error:', error.message);
-    return res.status(500).send('Error saving resume');
-  }
-
-  res.send('✅ Resume saved!');
-});
-
-  <div class="cta">
-    <h2>🔧 Claim Your Digital Presence</h2>
-    <a class="cta-link" href="/login" target="_blank" rel="noopener">
-      Sign in with Google via Supabase
-    </a>
-  </div>
-</body>
-</html>
-`;
-    const username = resumeText.split(/\s+/)[0].toLowerCase().replace(/[^a-z0-9]/g, '');
-    const filename = path.join(__dirname, 'public', 'resumes', `${username}.html`);
-
-    const fullHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${username}</title></head><body>${formattedContent}</body></html>`;
-
-    fs.mkdirSync(path.dirname(filename), { recursive: true });
-    fs.writeFileSync(filename, fullHTML);
-
-    res.send(fullHTML);
-  } catch (error) {
-    console.error('❌ Resume error:', error.message);
-    res.status(500).send('Error parsing resume.');
-  }
-});
-
-app.get('/:username', (req, res, next) => {
-  const filePath = path.join(__dirname, 'public', 'resumes', `${req.params.username}.html`);
-  if (fs.existsSync(filePath)) {
-    res.sendFile(filePath);
-  } else {
-    next();
+    if (error) throw error;
+    fs.unlink(filePath, () => {});
+    res.redirect(`https://${username}.pacmacmobile.com`);
+  } catch (err) {
+    console.error('❌ Upload error:', err);
+    res.status(500).send('Resume processing failed.');
   }
 });
 
@@ -284,44 +112,21 @@ app.post('/save-domain', async (req, res) => {
   res.send('✅ Domain saved!');
 });
 
-app.post('/save-resume', async (req, res) => {
-  const { email, html } = req.body;
-
-  if (!email || !html) {
-    return res.status(400).send('Missing email or resume HTML');
-  }
-
-  const { error } = await supabase
-    .from('resume_pages')
-    .insert([{ email, html }]);
-
-  if (error) {
-    console.error('❌ Failed to save resume:', error.message);
-    return res.status(500).send('Database insert failed');
-  }
-
-  res.send('✅ Resume saved');
-});
-
 app.post('/create-checkout-session', async (req, res) => {
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: 'Custom Domain + Google Suite Setup',
-            },
-            unit_amount: 1500,
-          },
-          quantity: 1,
+      line_items: [{
+        price_data: {
+          currency: 'usd',
+          product_data: { name: 'Custom Domain + Google Suite Setup' },
+          unit_amount: 1500
         },
-      ],
-      success_url: `${process.env.PUBLIC_URL || 'https://packiepresents.onrender.com'}/success.html`,
-      cancel_url: `${process.env.PUBLIC_URL || 'https://packiepresents.onrender.com'}/signup.html`,
+        quantity: 1
+      }],
+      success_url: `${process.env.PUBLIC_URL}/success.html`,
+      cancel_url: `${process.env.PUBLIC_URL}/signup.html`
     });
     res.json({ url: session.url });
   } catch (err) {

@@ -97,7 +97,7 @@
   })
 
   window.addEventListener('DOMContentLoaded', async () => {
-    const user = await claimSubdomainFromLinkedInProfile()
+    await claimSubdomainFromLinkedInProfile()
     // optionally redirect or update UI here
   })
 </script>
@@ -106,7 +106,7 @@
   <h2>🔗 Claim Your Site with LinkedIn</h2>
   <button id="linkedin-login" class="cta-link">Sign in with LinkedIn</button>
 </div>
-
+  
 <div id="terminalBox" style="display:none; background:#000; color:#0f0; font-family:monospace; padding:1em; border-radius:8px; margin-top:1em; height:200px; overflow:auto;">
   <pre id="terminalOutput">┌─[resume@parser]─[$] Initializing...\n</pre>
 </div>

@@ -89,13 +89,23 @@
     <p><strong>Need help or a quote?</strong><br>Email us at <a href="mailto:info@pacmacmobile.com" style="color:white;">vanlife@pacmacmobile.com</a></p>
       </div>
   
-<section id="resume">
-  <h2>Build Your Digital Presence</h2>
-  <p>Select your resume (.txt only):</p>
-  <input type="file" id="resumeUpload" accept=".txt"><br>
-<a class="cta-link" href="https://packiepresents.onrender.com/login" target="_blank" rel="noopener">
-  Sign in with Google via Supabase
-</a>
+<script type="module">
+  import { loginWithLinkedIn, claimSubdomainFromLinkedInProfile } from './modules/linkedin-auth.js'
+
+  document.getElementById('linkedin-login').addEventListener('click', async () => {
+    await loginWithLinkedIn()
+  })
+
+  window.addEventListener('DOMContentLoaded', async () => {
+    const user = await claimSubdomainFromLinkedInProfile()
+    // optionally redirect or update UI here
+  })
+</script>
+
+<div class="cta">
+  <h2>🔗 Claim Your Site with LinkedIn</h2>
+  <button id="linkedin-login" class="cta-link">Sign in with LinkedIn</button>
+</div>
 
 <div id="terminalBox" style="display:none; background:#000; color:#0f0; font-family:monospace; padding:1em; border-radius:8px; margin-top:1em; height:200px; overflow:auto;">
   <pre id="terminalOutput">┌─[resume@parser]─[$] Initializing...\n</pre>

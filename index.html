@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,45 +86,6 @@
     </ul>
   </div>
 </section>
-  
-<!-- LinkedIn Login -->
-<script type="module">
-  import { loginWithLinkedIn, claimSubdomainFromLinkedInProfile } from './modules/linkedin-auth.js'
-
-  document.getElementById('linkedin-login').addEventListener('click', async () => {
-    await loginWithLinkedIn()
-  })
-
-  window.addEventListener('DOMContentLoaded', async () => {
-    await claimSubdomainFromLinkedInProfile()
-  })
-
-  document.getElementById('upload-btn').addEventListener('click', () => {
-    const fileInput = document.getElementById('resumeUpload')
-    if (fileInput.files.length === 0) {
-      alert("Please select a resume file first.")
-      return
-    }
-
-    const file = fileInput.files[0]
-    const formData = new FormData()
-    formData.append('resume', file)
-
-    fetch('/upload', {
-      method: 'POST',
-      body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-      alert('✅ Resume uploaded and processed!')
-      // optionally redirect or show success
-    })
-    .catch(err => {
-      console.error('Upload error:', err)
-      alert('❌ Upload failed.')
-    })
-  })
-</script>
 
 <!-- UI -->
 <div class="cta">
@@ -136,28 +98,24 @@
   <input type="file" id="resumeUpload" accept=".txt,.pdf,.docx">
   <button id="upload-btn" class="cta-link">Upload Resume</button>
 </div>
-  
 
-
-  <!-- Skills Section -->
-  <section style="padding: 2em; text-align: center;">
-    <h2>We Speak Code</h2>
-    <div class="skills-icons" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1em;">
-      <img src="assets/CSS.png" alt="#CSS" />
-      <img src="assets/404.png" alt="404" />
-      <img src="assets/V1.png" alt="{}()" />
-      <img src="assets/Div.png" alt="<div>" />
-      <img src="assets/Packie.png" alt="<p>" />
-      <img src="assets/UX.png" alt="{UX}" />
-    </div>
-  </section>
-
-  
-<div id="terminalBox" style="display:none; background:#000; color:#0f0; font-family:monospace; padding:1em; border-radius:8px; margin-top:1em; height:200px; overflow:auto;">
-  <pre id="terminalOutput">┌─[resume@parser]─[$] Initializing...\n</pre>
-</div>
-  
+<!-- Skills Section -->
+<section style="padding: 2em; text-align: center;">
+  <h2>We Speak Code</h2>
+  <div class="skills-icons" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1em;">
+    <img src="assets/CSS.png" alt="#CSS" />
+    <img src="assets/404.png" alt="404" />
+    <img src="assets/V1.png" alt="{}()" />
+    <img src="assets/Div.png" alt="<div>" />
+    <img src="assets/Packie.png" alt="<p>" />
+    <img src="assets/UX.png" alt="{UX}" />
+  </div>
 </section>
+
+<div id="terminalBox" style="display:none; background:#000; color:#0f0; font-family:monospace; padding:1em; border-radius:8px; margin-top:1em; height:200px; overflow:auto;">
+  <pre id="terminalOutput">┌─[resume@parser]─[$] Initializing...
+</pre>
+</div>
 
 <section id="support">
   <h2>Support Our Journey</h2>
@@ -168,38 +126,6 @@
 <footer>
   <p>&copy; 2025 PacMac Mobile • Powered by caffeine, code, and Jesus.</p>
 </footer>
-
-
-  <div id="terminalWrapper">
-  <pre id="terminalOutput">┌─[packie@resume-gen]─[~]</pre><span id="cursor">█</span>
-</div>
-
-<style>
-  #terminalWrapper {
-    background-color: #0f0f0f;
-    color: #00ffcc;
-    font-family: monospace;
-    padding: 1.5em;
-    margin-top: 2em;
-    max-height: 300px;
-    overflow-y: auto;
-    border: 2px solid #00ffcc;
-    border-radius: 10px;
-    position: relative;
-    white-space: pre-wrap;
-  }
-
-  #cursor {
-    display: inline-block;
-    color: #00ffcc;
-    animation: blink 1s step-start infinite;
-    font-weight: bold;
-  }
-
-  @keyframes blink {
-    50% { opacity: 0; }
-  }
-</style>
 
 <script type="module">
   import { loginWithLinkedIn, claimSubdomainFromLinkedInProfile } from './modules/linkedin-auth.js'
@@ -238,10 +164,36 @@
   });
 </script>
 
-</body>
+<style>
+  #terminalWrapper {
+    background-color: #0f0f0f;
+    color: #00ffcc;
+    font-family: monospace;
+    padding: 1.5em;
+    margin-top: 2em;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 2px solid #00ffcc;
+    border-radius: 10px;
+    position: relative;
+    white-space: pre-wrap;
+  }
 
-<script src="aboutme.js"></script>
-  
-  <script type="module" src="aboutme.js"></script>
-  
+  #cursor {
+    display: inline-block;
+    color: #00ffcc;
+    animation: blink 1s step-start infinite;
+    font-weight: bold;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+</style>
+
+<div id="terminalWrapper">
+  <pre id="terminalOutput">┌─[packie@resume-gen]─[~]</pre><span id="cursor">█</span>
+</div>
+
+</body>
 </html>

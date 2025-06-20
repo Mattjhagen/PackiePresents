@@ -12,6 +12,7 @@ import { renderResumePage } from './utils/renderResumePage.js';
 import Stripe from 'stripe';
 import fetch from 'node-fetch';
 import { registerDomain } from '/utils/dynadot.js';
+import axios from 'axios'; // if using ESM
 
 // Config
 dotenv.config();

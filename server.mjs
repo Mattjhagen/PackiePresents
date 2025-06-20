@@ -7,6 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { createClient } from '@supabase/supabase-js';
 import { saveUserDomain } from './saveDomain.js';
+import { renderResumePage } from './utils/renderResumePage.js';
 import Stripe from 'stripe';
 
 dotenv.config();

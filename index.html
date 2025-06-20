@@ -169,7 +169,7 @@
   <p>&copy; 2025 PacMac Mobile • Powered by caffeine, code, and Jesus.</p>
 </footer>
 
-<script src="aboutme.js"></script>
+
   <div id="terminalWrapper">
   <pre id="terminalOutput">┌─[packie@resume-gen]─[~]</pre><span id="cursor">█</span>
 </div>
@@ -200,7 +200,47 @@
     50% { opacity: 0; }
   }
 </style>
+
+<script type="module">
+  import { loginWithLinkedIn, claimSubdomainFromLinkedInProfile } from './modules/linkedin-auth.js'
+
+  document.getElementById('linkedin-login').addEventListener('click', async () => {
+    await loginWithLinkedIn()
+  });
+
+  window.addEventListener('DOMContentLoaded', async () => {
+    await claimSubdomainFromLinkedInProfile()
+  });
+
+  document.getElementById('upload-btn').addEventListener('click', () => {
+    const fileInput = document.getElementById('resumeUpload');
+    if (fileInput.files.length === 0) {
+      alert("Please select a resume file first.");
+      return;
+    }
+
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append('resume', file);
+
+    fetch('/upload', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      alert('✅ Resume uploaded and processed!');
+    })
+    .catch(err => {
+      console.error('Upload error:', err);
+      alert('❌ Upload failed.');
+    });
+  });
+</script>
+
 </body>
+
+<script src="aboutme.js"></script>
   
   <script type="module" src="aboutme.js"></script>
   

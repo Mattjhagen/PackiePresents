@@ -168,7 +168,7 @@
         body: formData
       })
        .then(res => res.json())
-.then(() => {
+.then(data => {
   alert('✅ Resume uploaded and processed!');
   document.getElementById('domain-registration').style.display = 'block';
 })

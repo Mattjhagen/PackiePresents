@@ -1,0 +1,8 @@
+name = "packiechat"
+main = "packiechat.js" # or "server.mjs" or your entry file
+compatibility_date = "2024-06-01"
+
+[[ai]]
+binding = "AI"
+
+type = "javascript"

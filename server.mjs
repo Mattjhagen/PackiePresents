@@ -11,6 +11,7 @@ import { saveUserDomain } from './saveDomain.js';
 import { renderResumePage } from './utils/renderResumePage.js';
 import Stripe from 'stripe';
 import fetch from 'node-fetch';
+import { registerDomain } from '/utils/dynadot.js';
 
 // Config
 dotenv.config();
@@ -64,6 +65,21 @@ app.get('/login/:provider', async (req, res) => {
 
 app.get('/callback', (req, res) => {
   res.redirect('/signup.html');
+});
+
+// Dynadot Domain Registration
+
+app.post('/register-domain', async (req, res) => {
+  const { domain } = req.body;
+
+  if (!domain) return res.status(400).send('❌ Domain is required.');
+
+  try {
+    const result = await registerDomain(domain);
+    res.send(result);
+  } catch (err) {
+    res.status(500).send('❌ Domain registration failed.');
+  }
 });
 
 // Resume Upload -> Parse -> Save -> Redirect

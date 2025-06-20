@@ -1,1 +1,199 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PacMac Mobile - Web Design & VanLife</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="assets/favicon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <img src="assets/PacMac_Banner_Mobile_5.PNG" alt="#VanLife Banner">
+  <h1>PacMac Mobile</h1>
+  <p>Web Design • Repairs • #VanLife</p>
+</header>
+
+<nav>
+  <p>
+    <a href="#about">About</a> •
+    <a href="#services">Services</a> •
+    <a href="#plans">Plans</a> •
+    <a href="#resume">Resume</a> •
+    <a href="#support">Support</a>
+  </p>
+</nav>
+
+<section id="about">
+  <h2>Who We Are</h2>
+  <img src="assets/MattnTerra.PNG" alt="Matt and Terra" style="border-radius:50%; width:150px;">
+  <p>We’re Matt and Terra—partners in code, creativity, and coffee-fueled campfire chats. We build web magic while roaming the wild.</p>
+</section>
+
+<section id="services">
+  <h2>Services We Offer</h2>
+  <ul style="text-align:left; display:inline-block">
+    <li>📱 Mobile repair (Apple & Android)</li>
+    <li>🧠 Web design & dev (HTML/CSS, WordPress)</li>
+    <li>🔒 Cybersecurity tools (Kali-friendly)</li>
+  </ul>
+</section>
+
+<section id="plans">
+  <h2>Choose Your Perfect Plan</h2>
+
+  <div class="plan" style="border-color: #00ff99;">
+    <h3>Starter</h3>
+    <p>$3,499 upfront</p>
+    <p>$35/month</p>
+    <ul>
+      <li>Mobile Responsive Design</li>
+      <li>Contact Form Integration</li>
+      <li>Basic CMS</li>
+      <li>Limited Support</li>
+    </ul>
+    <strong>Add-ons:</strong>
+    <ul>
+      <li>Google Suite</li>
+      <li>Basic SEO</li>
+    </ul>
+  </div>
+
+  <div class="plan" style="border-color: gold;">
+    <h3>Professional</h3>
+    <p>$7,499 upfront</p>
+    <p>$129/month</p>
+    <ul>
+      <li>All Starter Features</li>
+      <li>Custom Design</li>
+      <li>Blog Integration</li>
+      <li>HIPAA-Compliant Security</li>
+    </ul>
+  </div>
+
+  <div class="plan" style="border-color: limegreen;">
+    <h3>Enterprise</h3>
+    <p>$12,499 upfront</p>
+    <p>$350/month</p>
+    <ul>
+      <li>All Pro Features</li>
+      <li>Strategy Sessions</li>
+      <li>Analytics Dashboard</li>
+      <li>Account Manager</li>
+      <li>Ongoing Support</li>
+    </ul>
+  </div>
+</section>
+
+<!-- UI -->
+<div class="cta">
+  <h2>🔗 Claim Your Site with LinkedIn</h2>
+  <button id="linkedin-login" class="cta-link">Sign in with LinkedIn</button>
+</div>
+
+<div class="cta" style="margin-top: 2em;">
+  <h2>📄 Optional: Upload Your Resume</h2>
+  <input type="file" id="resumeUpload" accept=".txt,.pdf,.docx">
+  <button id="upload-btn" class="cta-link">Upload Resume</button>
+</div>
+
+<!-- Skills Section -->
+<section style="padding: 2em; text-align: center;">
+  <h2>We Speak Code</h2>
+  <div class="skills-icons" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1em;">
+    <img src="assets/CSS.png" alt="#CSS" />
+    <img src="assets/404.png" alt="404" />
+    <img src="assets/V1.png" alt="{}()" />
+    <img src="assets/Div.png" alt="<div>" />
+    <img src="assets/Packie.png" alt="<p>" />
+    <img src="assets/UX.png" alt="{UX}" />
+  </div>
+</section>
+
+<div id="terminalBox" style="display:none; background:#000; color:#0f0; font-family:monospace; padding:1em; border-radius:8px; margin-top:1em; height:200px; overflow:auto;">
+  <pre id="terminalOutput">┌─[resume@parser]─[$] Initializing...
+</pre>
+</div>
+
+<section id="support">
+  <h2>Support Our Journey</h2>
+  <p>We’re working toward a solar generator to work 100% off-grid.</p>
+  <p><a href="https://www.venmo.com/u/PackieMobile" target="_blank">💚 Spot Some Green</a></p>
+</section>
+
+<footer>
+  <p>&copy; 2025 PacMac Mobile • Powered by caffeine, code, and Jesus.</p>
+</footer>
+
+<script type="module">
+  import { loginWithLinkedIn, claimSubdomainFromLinkedInProfile } from './modules/linkedin-auth.js'
+
+  document.getElementById('linkedin-login').addEventListener('click', async () => {
+    await loginWithLinkedIn()
+  });
+
+  window.addEventListener('DOMContentLoaded', async () => {
+    await claimSubdomainFromLinkedInProfile()
+  });
+
+  document.getElementById('upload-btn').addEventListener('click', () => {
+    const fileInput = document.getElementById('resumeUpload');
+    if (fileInput.files.length === 0) {
+      alert("Please select a resume file first.");
+      return;
+    }
+
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append('resume', file);
+
+    fetch('/upload', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      alert('✅ Resume uploaded and processed!');
+    })
+    .catch(err => {
+      console.error('Upload error:', err);
+      alert('❌ Upload failed.');
+    });
+  });
+</script>
+
+<style>
+  #terminalWrapper {
+    background-color: #0f0f0f;
+    color: #00ffcc;
+    font-family: monospace;
+    padding: 1.5em;
+    margin-top: 2em;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 2px solid #00ffcc;
+    border-radius: 10px;
+    position: relative;
+    white-space: pre-wrap;
+  }
+
+  #cursor {
+    display: inline-block;
+    color: #00ffcc;
+    animation: blink 1s step-start infinite;
+    font-weight: bold;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+</style>
+
+<div id="terminalWrapper">
+  <pre id="terminalOutput">┌─[packie@resume-gen]─[~]</pre><span id="cursor">█</span>
+</div>
+
+</body>
+</html>

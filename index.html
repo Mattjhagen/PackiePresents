@@ -250,5 +250,19 @@ textarea {
   initializePortfolioAnimations();
 </script>
   <link rel="stylesheet" href="animated-portfolio.css">
+  <script>
+  async function register(e) {
+    e.preventDefault();
+    const domain = document.getElementById('domainInput').value;
+    const res = await fetch('/register-domain', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ domain }),
+    });
+
+    const data = await res.json();
+    document.getElementById('domainResponse').textContent = JSON.stringify(data, null, 2);
+  }
+</script>
 </body>
 </html>

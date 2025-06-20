@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Digital Portfolio</title>
+  <link rel="stylesheet" href="animated-portfolio.css" />
+</head>
+<body>
+  <header class="section fade-in delay-1">
+    <h1 class="glow">Welcome to My World</h1>
+    <p class="subtitle">A journey through my creativity, tech, and ideas</p>
+  </header>
+
+  <section class="section fade-in delay-2">
+    <h2>🚀 Projects</h2>
+    <div class="project">
+      <h3>Resume Site Generator</h3>
+      <p>A tool that transforms your resume into a custom "About Me" website. Auto-deploys, optional custom domain, and GSuite email.</p>
+    </div>
+    <div class="project">
+      <h3>Scam Buster Bot</h3>
+      <p>AI-powered bot to waste scammer time and report them. Integrated with Amazon Connect + Lex.</p>
+    </div>
+  </section>
+
+  <section class="section fade-in delay-3">
+    <h2>💡 Skills</h2>
+    <ul>
+      <li>HTML / CSS / JS</li>
+      <li>Supabase & OAuth</li>
+      <li>AWS & Serverless</li>
+      <li>GPT Integration</li>
+      <li>Branding / UI / UX</li>
+    </ul>
+  </section>
+
+  <section class="section fade-in delay-4">
+    <h2>💬 Ask Packie</h2>
+    <div id="packie-chat">
+      <p class="subtitle">Ask why an online presence matters</p>
+      <textarea id="user-msg" placeholder="Why should I have a portfolio?"></textarea>
+      <button onclick="sendToPackie()">🚀 Ask Packie</button>
+      <pre id="bot-reply">┌─[packie@chatbot]─[~]</pre>
+    </div>
+  </section>
+
+  <section class="section fade-in delay-5">
+    <h2>🌐 Claim Your Site</h2>
+    <a href="/login" class="cta-link">Sign in with Google</a>
+    <p>Or <a href="/signup.html">build yours</a> in minutes.</p>
+  </section>
+
+  <footer class="section fade-in delay-6">
+    <p>&copy; 2025 Built by Me with ☕ + 💻</p>
+  </footer>
+
+  <script>
+    async function sendToPackie() {
+      const message = document.getElementById('user-msg').value;
+      const res = await fetch('https://YOUR_WORKER_URL.workers.dev/chat', {
+        method: 'POST',
+        body: JSON.stringify({ message }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await res.json();
+      document.getElementById('bot-reply').textContent = '┌─[packie@chatbot]─[~]\n' + data.reply;
+    }
+  </script>
+</body>
+</html>

@@ -9,7 +9,7 @@ import { createClient } from '@supabase/supabase-js';
 import { saveUserDomain } from './saveDomain.js';
 import { renderResumePage } from './utils/renderResumePage.js';
 import Stripe from 'stripe';
-
+import saveResumeHandler from './saveResumeHandler.js;
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,6 +26,7 @@ const __dirname = path.dirname(__filename);
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('public'));
+app.use(saveResumeHandler);
 
 app.get('*', async (req, res) => {
   const host = req.headers.host;

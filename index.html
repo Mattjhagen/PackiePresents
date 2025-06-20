@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,7 +86,7 @@
   </div>
 </section>
 
-<!-- UI -->
+<!-- UI Buttons -->
 <div class="cta">
   <h2>🔗 Claim Your Site with LinkedIn</h2>
   <button id="linkedin-login" class="cta-link">Sign in with LinkedIn</button>
@@ -112,11 +111,6 @@
   </div>
 </section>
 
-<div id="terminalBox" style="display:none; background:#000; color:#0f0; font-family:monospace; padding:1em; border-radius:8px; margin-top:1em; height:200px; overflow:auto;">
-  <pre id="terminalOutput">┌─[resume@parser]─[$] Initializing...
-</pre>
-</div>
-
 <section id="support">
   <h2>Support Our Journey</h2>
   <p>We’re working toward a solar generator to work 100% off-grid.</p>
@@ -127,59 +121,29 @@
   <p>&copy; 2025 PacMac Mobile • Powered by caffeine, code, and Jesus.</p>
 </footer>
 
-<!--script type="module">
-  import { loginWithLinkedIn, claimSubdomainFromLinkedInProfile } from './modules/linkedin-auth.js'
+<!-- Terminal Display -->
+<div id="terminalWrapper">
+  <pre id="terminalOutput">┌─[packie@resume-gen]─[~]</pre><span id="cursor">█</span>
+</div>
 
-  document.getElementById('linkedin-login').addEventListener('click', async () => {
-    await loginWithLinkedIn()
-  });
-
-  window.addEventListener('DOMContentLoaded', async () => {
-    await claimSubdomainFromLinkedInProfile()
-  });
-
-  document.getElementById('upload-btn').addEventListener('click', () => {
-    const fileInput = document.getElementById('resumeUpload');
-    if (fileInput.files.length === 0) {
-      alert("Please select a resume file first.");
-      return;
-    }
-
-    const file = fileInput.files[0];
-    const formData = new FormData();
-    formData.append('resume', file);
-
-    fetch('/upload', {
-      method: 'POST',
-      body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-      alert('✅ Resume uploaded and processed!');
-    })
-    .catch(err => {
-      console.error('Upload error:', err);
-      alert('❌ Upload failed.');
-    });
-  });
-</script-->
-
-  <script>
-  // Temporary inline mock functions
+<!-- Behavior Script (no modules, no broken imports) -->
+<script>
   async function loginWithLinkedIn() {
-    alert("🔗 LinkedIn login clicked. Replace with real login flow.");
+    alert("🔗 LinkedIn login clicked (demo placeholder). Replace with actual logic.");
   }
 
   async function claimSubdomainFromLinkedInProfile() {
-    console.log("🏷️ Subdomain claim triggered. Replace with actual logic.");
+    console.log("🏷️ Subdomain claim placeholder logic.");
   }
 
   document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('linkedin-login')?.addEventListener('click', loginWithLinkedIn);
+
     document.getElementById('upload-btn')?.addEventListener('click', () => {
       const fileInput = document.getElementById('resumeUpload');
-      if (!fileInput?.files.length) {
-        return alert("Please select a resume file first.");
+      if (!fileInput || fileInput.files.length === 0) {
+        alert("Please select a resume file first.");
+        return;
       }
 
       const file = fileInput.files[0];
@@ -190,18 +154,19 @@
         method: 'POST',
         body: formData
       })
-      .then(res => res.json())
-      .then(() => alert('✅ Resume uploaded!'))
-      .catch(err => {
-        console.error(err);
-        alert('❌ Upload failed.');
-      });
+        .then(res => res.json())
+        .then(() => alert('✅ Resume uploaded!'))
+        .catch(err => {
+          console.error(err);
+          alert('❌ Upload failed.');
+        });
     });
 
     claimSubdomainFromLinkedInProfile();
   });
 </script>
 
+<!-- Terminal Style -->
 <style>
   #terminalWrapper {
     background-color: #0f0f0f;
@@ -229,9 +194,44 @@
   }
 </style>
 
-<div id="terminalWrapper">
-  <pre id="terminalOutput">┌─[packie@resume-gen]─[~]</pre><span id="cursor">█</span>
+  <div id="chat-widget">
+  <textarea id="user-msg" placeholder="Ask Packie something..." rows="3"></textarea>
+  <button onclick="sendToPackie()">💬 Ask Packie</button>
+  <pre id="bot-reply"></pre>
 </div>
 
+<script>
+async function sendToPackie() {
+  const message = document.getElementById('user-msg').value;
+  const res = await fetch('https://YOUR_WORKER_URL.workers.dev', {
+    method: 'POST',
+    body: JSON.stringify({ message }),
+    headers: { 'Content-Type': 'application/json' }
+  });
+  const data = await res.json();
+  document.getElementById('bot-reply').textContent = data.reply;
+}
+</script>
+
+<style>
+#chat-widget {
+  background: #111;
+  color: #0f0;
+  padding: 1em;
+  border: 1px solid #0f0;
+  border-radius: 10px;
+  max-width: 400px;
+  margin: 2em auto;
+  font-family: monospace;
+}
+textarea {
+  width: 100%;
+  background: #000;
+  color: #0f0;
+  border: 1px solid #0f0;
+  margin-bottom: 0.5em;
+}
+</style>
+  
 </body>
 </html>

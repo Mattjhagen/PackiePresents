@@ -96,7 +96,7 @@ npm run format     # Prettify code
 
 ## 📬 Contact / Questions
 
-Feel free to DM [@PackieMobile](https://www.reddit.com/user/PackieMobile) or email `support@pacmacmobile.com`.
+Feel free to DM [@PackieMobile](https://www.reddit.com/u/PackieAI/s/ttd2Had29W) or email `info@pacmacmobile.com`.
 
 ---
 

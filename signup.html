@@ -69,6 +69,22 @@
         </div>
       `;
     }
+    <button onclick="checkout()">💸 Upgrade with Stripe</button>
+
+<script>
+async function checkout() {
+  const res = await fetch('/create-checkout-session', {
+    method: 'POST'
+  });
+
+  const data = await res.json();
+  if (data.url) {
+    window.location.href = data.url;
+  } else {
+    alert('Error creating checkout session.');
+  }
+}
+</script>
   </script>
   <script type="module" src="postSignup.js"></script>
 </body>

@@ -1,3 +1,7 @@
+app.post('/upload', (req, res) => {
+  console.log('🟢 Upload route hit');
+  ...
+});
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';

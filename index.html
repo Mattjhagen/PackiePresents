@@ -167,11 +167,15 @@
         method: 'POST',
         body: formData
       })
-        .then(res => res.json())
-        .then(() => alert('✅ Resume uploaded!'))
-        .catch(err => {
-          console.error(err);
-          alert('❌ Upload failed.');
+       .then(res => res.json())
+.then(() => {
+  alert('✅ Resume uploaded and processed!');
+  document.getElementById('domain-registration').style.display = 'block';
+})
+.catch(err => {
+  console.error(err);
+  alert('❌ Upload failed.');
+});
         });
     });
 

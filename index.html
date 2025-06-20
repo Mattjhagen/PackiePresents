@@ -127,7 +127,7 @@
   <p>&copy; 2025 PacMac Mobile • Powered by caffeine, code, and Jesus.</p>
 </footer>
 
-<script type="module">
+<!--script type="module">
   import { loginWithLinkedIn, claimSubdomainFromLinkedInProfile } from './modules/linkedin-auth.js'
 
   document.getElementById('linkedin-login').addEventListener('click', async () => {
@@ -161,6 +161,44 @@
       console.error('Upload error:', err);
       alert('❌ Upload failed.');
     });
+  });
+</script-->
+
+  <script>
+  // Temporary inline mock functions
+  async function loginWithLinkedIn() {
+    alert("🔗 LinkedIn login clicked. Replace with real login flow.");
+  }
+
+  async function claimSubdomainFromLinkedInProfile() {
+    console.log("🏷️ Subdomain claim triggered. Replace with actual logic.");
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('linkedin-login')?.addEventListener('click', loginWithLinkedIn);
+    document.getElementById('upload-btn')?.addEventListener('click', () => {
+      const fileInput = document.getElementById('resumeUpload');
+      if (!fileInput?.files.length) {
+        return alert("Please select a resume file first.");
+      }
+
+      const file = fileInput.files[0];
+      const formData = new FormData();
+      formData.append('resume', file);
+
+      fetch('/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(() => alert('✅ Resume uploaded!'))
+      .catch(err => {
+        console.error(err);
+        alert('❌ Upload failed.');
+      });
+    });
+
+    claimSubdomainFromLinkedInProfile();
   });
 </script>
 

@@ -27,10 +27,23 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-app.get('/', (req, res) => {
-  res.send('🚀 Supabase OAuth + Resume Parser API running!');
-});
+app.get('*', async (req, res) => {
+  const host = req.headers.host;
+  const subdomain = host.split('.')[0];
 
+  // Avoid serving resume for root or dev hosts
+  if (!subdomain || ['www', 'localhost', 'pacmacmobile'].includes(subdomain)) {
+    return res.send('🚀 Supabase OAuth + Resume Parser API running!');
+  }
+
+  try {
+    const html = await renderResumePage(subdomain);
+    res.send(html);
+  } catch (err) {
+    console.error(`❌ Resume not found for ${subdomain}:`, err.message);
+    res.status(404).send(`<h2>❌ Resume not found for "${subdomain}"</h2>`);
+  }
+});
 app.get('/login/:provider', async (req, res) => {
   const provider = req.params.provider;
   const { data, error } = await supabase.auth.signInWithOAuth({

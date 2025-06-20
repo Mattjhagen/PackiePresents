@@ -151,7 +151,30 @@ app.post('/create-checkout-session', async (req, res) => {
     res.status(500).json({ error: 'Stripe checkout failed' });
   }
 });
+app.post('/register-domain', async (req, res) => {
+  const { domain } = req.body;
 
+  if (!domain) {
+    return res.status(400).send({ error: 'Missing domain name.' });
+  }
+
+  try {
+    const result = await axios.post('https://api.dynadot.com/api3.json', null, {
+      params: {
+        key: process.env.DYNADOT_API_KEY,
+        command: 'register',
+        domain,
+        currency: 'USD',
+        duration: 1
+      }
+    });
+
+    res.send({ success: true, result: result.data });
+  } catch (err) {
+    console.error('❌ Dynadot registration error:', err.message);
+    res.status(500).send({ error: 'Failed to register domain.' });
+  }
+});
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });

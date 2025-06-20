@@ -220,13 +220,14 @@
 <script>
 async function sendToPackie() {
   const message = document.getElementById('user-msg').value;
-  const res = await fetch('https://YOUR_WORKER_URL.workers.dev', {
+  const res = await fetch('https://packiepresents.workers.dev/chat', {
     method: 'POST',
     body: JSON.stringify({ message }),
     headers: { 'Content-Type': 'application/json' }
   });
   const data = await res.json();
-  document.getElementById('bot-reply').textContent = data.reply;
+  document.getElementById('bot-reply').textContent = 
+    '┌─[packie@chatbot]─[~]\n' + data.reply;
 }
 </script>
 

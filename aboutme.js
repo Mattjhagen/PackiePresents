@@ -80,6 +80,15 @@ const { data: { user } } = await supabase.auth.getUser();
       console.error('Failed to generate page:', err);
     }
   };
+  
+  await fetch('https://your-backend.com/api/saveResume', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    email: user.email,      // from Supabase Auth
+    html: parsedResumeHtml  // already generated
+  })
+});
 
   reader.readAsText(file);
 };

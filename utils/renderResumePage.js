@@ -1,25 +1,31 @@
-// utils/renderResumePage.js
+import { createClient } from '@supabase/supabase-js';
+import dotenv from 'dotenv';
 
-export async function renderResumePage(subdomain, supabase) {
+dotenv.config();
+
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+
+export async function renderResumePage(subdomain) {
   const { data, error } = await supabase
     .from('resume_pages')
     .select('html')
-    .eq('username', subdomain)
+    .eq('email', `${subdomain}@example.com`)  // Adjust this logic if needed
     .single();
 
-  if (error || !data) {
-    throw new Error('Resume page not found');
-  }
+  if (error || !data?.html) throw new Error('No resume found for this subdomain');
 
-  const footerCTA = `
-    <div style="text-align:center; margin-top:2em;">
-      <hr style="margin: 2em 0; border-color: #444;">
-      <p style="color:#00ffff;">
-        🚀 Build your own site like this one at 
-        <a href="https://pacmacmobile.com" style="color:#00ffff;">PacMacMobile.com</a>
-      </p>
+  // Inject CTA
+  const htmlWithCTA = data.html.replace(
+    '</body>',
+    `
+    <div class="cta">
+      <h2>🚀 Claim Your Digital Presence</h2>
+      <a class="cta-link" href="/login" target="_blank" rel="noopener">
+        Sign in with Google via Supabase
+      </a>
     </div>
-  `;
+    </body>`
+  );
 
-  return data.html + footerCTA;
+  return htmlWithCTA;
 }

@@ -1,8 +1,9 @@
 name = "packiechat"
-main = "packiechat.js" # or "server.mjs" or your entry file
-compatibility_date = "2024-06-01"
-
-[[ai]]
-binding = "AI"
-
 type = "javascript"
+account_id = "b36aaecab5f5f0c07ef80a83a1e6c561"
+workers_dev = true
+compatibility_date = "2025-06-20"
+
+[vars]
+# These can include API keys or other environment variables
+

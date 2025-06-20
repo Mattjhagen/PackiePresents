@@ -1,184 +1,110 @@
-app.post('/upload', (req, res) => {
-  console.log('🟢 Upload route hit');
-  ...
-});
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import fs from 'fs';
-import path from 'path';
-import multer from 'multer';
-import { fileURLToPath } from 'url';
-import { createClient } from '@supabase/supabase-js';
-import { saveUserDomain } from './saveDomain.js';
-import { renderResumePage } from './utils/renderResumePage.js';
-import Stripe from 'stripe';
-import fetch from 'node-fetch';
-import { registerDomain } from '/utils/dynadot.js';
-import axios from 'axios'; // if using ESM
+// server.js
+const express = require('express');
+const dotenv = require('dotenv');
+const cors = require('cors');
+const multer = require('multer');
+const bodyParser = require('body-parser');
+const fs = require('fs/promises');
+const pdfParse = require('pdf-parse');
+const { createClient } = require('@supabase/supabase-js');
+const { createSubdomainRecord } = require('./cloudflare');
+const { validateResume, validateDomain } = require('./validators');
+const { saveUserDomain } = require('./saveDomain');
 
-// Config
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
 const upload = multer({ dest: 'uploads/' });
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
 
-// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-// Dynamic subdomain rendering
-app.get('*', async (req, res) => {
-  const host = req.headers.host;
-  const subdomain = host.split('.')[0];
+// Subdomain route
+app.use(async (req, res, next) => {
+  const subdomain = req.subdomains?.[0];
+  if (subdomain && subdomain !== 'www') {
+    const { data, error } = await supabase
+      .from('about_pages')
+      .select('html')
+      .eq('slug', subdomain)
+      .single();
 
-  if (!subdomain || ['www', 'localhost', 'pacmacmobile'].includes(subdomain)) {
-    return res.send('🚀 Supabase OAuth + Resume Parser API running!');
+    if (data?.html) return res.send(data.html);
+    return res.status(404).send('User page not found.');
   }
+  next();
+});
+
+// Authenticated upload endpoint
+app.post('/upload-resume', upload.single('resumeFile'), async (req, res) => {
+  const accessToken = req.headers.authorization?.split(' ')[1];
+  if (!accessToken) return res.status(401).send('Missing access token');
+
+  const authedClient = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY,
+    { global: { headers: { Authorization: `Bearer ${accessToken}` } } }
+  );
+
+  const { data: userData, error: userError } = await authedClient.auth.getUser();
+  if (!userData?.user) return res.status(401).send('Unauthorized');
 
   try {
-    const html = await renderResumePage(subdomain);
-    res.send(html);
-  } catch (err) {
-    console.error(`❌ Resume not found for ${subdomain}:`, err.message);
-    res.status(404).send(`<h2>❌ Resume not found for "${subdomain}"</h2>`);
-  }
-});
+    const file = req.file;
+    if (!file) return res.status(400).send('No file');
 
-// OAuth login
-app.get('/login/:provider', async (req, res) => {
-  const provider = req.params.provider;
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider,
-    options: { redirectTo: `${process.env.PUBLIC_URL}/callback` }
-  });
+    let resumeText = '';
+    if (file.mimetype === 'application/pdf') {
+      const buffer = await fs.readFile(file.path);
+      const data = await pdfParse(buffer);
+      resumeText = data.text;
+    } else if (file.mimetype === 'text/plain') {
+      resumeText = await fs.readFile(file.path, 'utf-8');
+    } else {
+      return res.status(400).send('Unsupported file format');
+    }
 
-  if (error || !data?.url) {
-    console.error(`❌ OAuth (${provider}) error:`, error?.message || 'No URL');
-    return res.status(500).send('Auth error');
-  }
+    await fs.unlink(file.path);
 
-  res.redirect(data.url);
-});
-
-app.get('/callback', (req, res) => {
-  res.redirect('/signup.html');
-});
-
-// Dynadot Domain Registration
-
-app.post('/register-domain', async (req, res) => {
-  const { domain } = req.body;
-
-  if (!domain) return res.status(400).send('❌ Domain is required.');
-
-  try {
-    const result = await registerDomain(domain);
-    res.send(result);
-  } catch (err) {
-    res.status(500).send('❌ Domain registration failed.');
-  }
-});
-
-// Resume Upload -> Parse -> Save -> Redirect
-app.post('/upload', upload.single('resume'), async (req, res) => {
-  try {
-    const filePath = path.resolve(req.file.path);
-    const resumeText = await fs.promises.readFile(filePath, 'utf-8');
-    const username = resumeText.split(/\s+/)[0].toLowerCase().replace(/[^a-z0-9]/g, '') + Date.now().toString().slice(-4);
-
-    const gptRes = await fetch('https://api.openai.com/v1/chat/completions', {
+    const openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         model: 'gpt-4',
         messages: [
-          { role: 'system', content: 'You are a resume-to-HTML formatter.' },
+          { role: 'system', content: 'You are an expert resume formatter. Format into an HTML About Me page.' },
           { role: 'user', content: resumeText }
         ]
       })
     });
 
-    const gptData = await gptRes.json();
-    const formattedContent = gptData.choices?.[0]?.message?.content || 'Error formatting resume.';
+    const aiData = await openaiRes.json();
+    const formattedHTML = aiData.choices?.[0]?.message?.content || '';
 
-    const { error } = await supabase.from('resume_pages').insert({
-      subdomain: username,
-      html: formattedContent
+    const email = userData.user.email;
+    const slug = email.split('@')[0].toLowerCase().replace(/\W/g, '');
+
+    await supabase.from('about_pages').upsert({
+      slug,
+      email,
+      html: formattedHTML
     });
 
-    if (error) throw error;
-    fs.unlink(filePath, () => {});
-    res.redirect(`https://${username}.pacmacmobile.com`);
+    await createSubdomainRecord(slug);
+
+    res.send({ message: 'Success', previewUrl: `https://${slug}.${process.env.ROOT_DOMAIN}` });
   } catch (err) {
-    console.error('❌ Upload error:', err);
-    res.status(500).send('Resume processing failed.');
+    console.error(err.message);
+    res.status(500).send('Failed to upload resume');
   }
 });
 
-app.post('/save-domain', async (req, res) => {
-  const { email, type, domain } = req.body;
-  if (!email || !type || !domain) return res.status(400).send('Missing fields');
-  await saveUserDomain(email, type, domain);
-  res.send('✅ Domain saved!');
-});
-
-app.post('/create-checkout-session', async (req, res) => {
-  try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'payment',
-      line_items: [{
-        price_data: {
-          currency: 'usd',
-          product_data: { name: 'Custom Domain + Google Suite Setup' },
-          unit_amount: 1500
-        },
-        quantity: 1
-      }],
-      success_url: `${process.env.PUBLIC_URL}/success.html`,
-      cancel_url: `${process.env.PUBLIC_URL}/signup.html`
-    });
-    res.json({ url: session.url });
-  } catch (err) {
-    console.error('❌ Stripe error:', err.message);
-    res.status(500).json({ error: 'Stripe checkout failed' });
-  }
-});
-app.post('/register-domain', async (req, res) => {
-  const { domain } = req.body;
-
-  if (!domain) {
-    return res.status(400).send({ error: 'Missing domain name.' });
-  }
-
-  try {
-    const result = await axios.post('https://api.dynadot.com/api3.json', null, {
-      params: {
-        key: process.env.DYNADOT_API_KEY,
-        command: 'register',
-        domain,
-        currency: 'USD',
-        duration: 1
-      }
-    });
-
-    res.send({ success: true, result: result.data });
-  } catch (err) {
-    console.error('❌ Dynadot registration error:', err.message);
-    res.status(500).send({ error: 'Failed to register domain.' });
-  }
-});
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

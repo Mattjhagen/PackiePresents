@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,7 +86,7 @@
   </div>
 </section>
 
-<!-- UI -->
+<!-- UI Buttons -->
 <div class="cta">
   <h2>🔗 Claim Your Site with LinkedIn</h2>
   <button id="linkedin-login" class="cta-link">Sign in with LinkedIn</button>
@@ -112,11 +111,6 @@
   </div>
 </section>
 
-<div id="terminalBox" style="display:none; background:#000; color:#0f0; font-family:monospace; padding:1em; border-radius:8px; margin-top:1em; height:200px; overflow:auto;">
-  <pre id="terminalOutput">┌─[resume@parser]─[$] Initializing...
-</pre>
-</div>
-
 <section id="support">
   <h2>Support Our Journey</h2>
   <p>We’re working toward a solar generator to work 100% off-grid.</p>
@@ -127,43 +121,52 @@
   <p>&copy; 2025 PacMac Mobile • Powered by caffeine, code, and Jesus.</p>
 </footer>
 
-<script type="module">
-  import { loginWithLinkedIn, claimSubdomainFromLinkedInProfile } from './modules/linkedin-auth.js'
+<!-- Terminal Display -->
+<div id="terminalWrapper">
+  <pre id="terminalOutput">┌─[packie@resume-gen]─[~]</pre><span id="cursor">█</span>
+</div>
 
-  document.getElementById('linkedin-login').addEventListener('click', async () => {
-    await loginWithLinkedIn()
-  });
+<!-- Behavior Script (no modules, no broken imports) -->
+<script>
+  async function loginWithLinkedIn() {
+    alert("🔗 LinkedIn login clicked (demo placeholder). Replace with actual logic.");
+  }
 
-  window.addEventListener('DOMContentLoaded', async () => {
-    await claimSubdomainFromLinkedInProfile()
-  });
+  async function claimSubdomainFromLinkedInProfile() {
+    console.log("🏷️ Subdomain claim placeholder logic.");
+  }
 
-  document.getElementById('upload-btn').addEventListener('click', () => {
-    const fileInput = document.getElementById('resumeUpload');
-    if (fileInput.files.length === 0) {
-      alert("Please select a resume file first.");
-      return;
-    }
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('linkedin-login')?.addEventListener('click', loginWithLinkedIn);
 
-    const file = fileInput.files[0];
-    const formData = new FormData();
-    formData.append('resume', file);
+    document.getElementById('upload-btn')?.addEventListener('click', () => {
+      const fileInput = document.getElementById('resumeUpload');
+      if (!fileInput || fileInput.files.length === 0) {
+        alert("Please select a resume file first.");
+        return;
+      }
 
-    fetch('/upload', {
-      method: 'POST',
-      body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-      alert('✅ Resume uploaded and processed!');
-    })
-    .catch(err => {
-      console.error('Upload error:', err);
-      alert('❌ Upload failed.');
+      const file = fileInput.files[0];
+      const formData = new FormData();
+      formData.append('resume', file);
+
+      fetch('/upload', {
+        method: 'POST',
+        body: formData
+      })
+        .then(res => res.json())
+        .then(() => alert('✅ Resume uploaded!'))
+        .catch(err => {
+          console.error(err);
+          alert('❌ Upload failed.');
+        });
     });
+
+    claimSubdomainFromLinkedInProfile();
   });
 </script>
 
+<!-- Terminal Style -->
 <style>
   #terminalWrapper {
     background-color: #0f0f0f;
@@ -190,10 +193,6 @@
     50% { opacity: 0; }
   }
 </style>
-
-<div id="terminalWrapper">
-  <pre id="terminalOutput">┌─[packie@resume-gen]─[~]</pre><span id="cursor">█</span>
-</div>
 
 </body>
 </html>

@@ -37,6 +37,16 @@ app.get('/login/:provider', async (req, res) => {
     options: {
       redirectTo: `${process.env.PUBLIC_URL || 'https://packiepresents.onrender.com'}/callback`
     }
+    
+    app.get('*', (req, res, next) => {
+  const host = req.headers.host; // e.g. 'john.yourdomain.com'
+  // extract subdomain: the part before your main domain
+  const subdomain = host.split('.')[0];
+  
+  // optional: validate it matches a saved record in your DB
+  // then pull resume HTML for that user and send it
+});
+
   });
 
   if (error || !data?.url) {

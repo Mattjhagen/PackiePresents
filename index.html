@@ -98,6 +98,18 @@
   <button id="upload-btn" class="cta-link">Upload Resume</button>
 </div>
 
+  <!-- Domain Registration-->
+  <div id="domain-registration" style="display: none; margin-top: 2em;">
+  <h2>🌍 Claim Your Custom Domain</h2>
+  <p>You've got a professional page — now make it official with your own domain name.</p>
+  <form onsubmit="register(event)">
+    <input type="text" id="domainInput" placeholder="yourname.com" />
+    <button type="submit" class="cta-link">Register Domain</button>
+  </form>
+  <pre id="domainResponse" style="margin-top: 1em; color: lime;"></pre>
+  </div>
+
+  
 <!-- Skills Section -->
 <section style="padding: 2em; text-align: center;">
   <h2>We Speak Code</h2>

@@ -137,45 +137,6 @@
   <button id="upload-btn" class="cta-link">Upload Resume</button>
 </div>
   
-  document.getElementById('upload-btn').addEventListener('click', () => {
-    const fileInput = document.getElementById('resumeUpload')
-    if (fileInput.files.length === 0) {
-      alert("Please select a resume file first.")
-      return
-    }
-
-    const file = fileInput.files[0]
-    const formData = new FormData()
-    formData.append('resume', file)
-
-    fetch('/upload', {
-      method: 'POST',
-      body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-      alert('✅ Resume uploaded and processed!')
-      // optionally redirect or show success
-    })
-    .catch(err => {
-      console.error('Upload error:', err)
-      alert('❌ Upload failed.')
-    })
-  })
-</script>
-
-<!-- UI -->
-<div class="cta">
-  <h2>🔗 Claim Your Site with LinkedIn</h2>
-  <button id="linkedin-login" class="cta-link">Sign in with LinkedIn</button>
-</div>
-
-<div class="cta" style="margin-top: 2em;">
-  <h2>📄 Optional: Upload Your Resume</h2>
-  <input type="file" id="resumeUpload" accept=".txt,.pdf,.docx">
-  <button id="upload-btn" class="cta-link">Upload Resume</button>
-</div>
-</div>
 
 
   <!-- Skills Section -->

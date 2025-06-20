@@ -1,119 +1,72 @@
-/* General Page Styles */
+/* Animated Portfolio Styling */
 body {
-  background-color: #000;
-  color: #00ff99;
-  font-family: monospace;
+  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+  color: #00ffee;
+  font-family: 'Courier New', monospace;
   margin: 0;
-  padding: 0 1em;
-  text-align: center;
+  padding: 0;
 }
 
-header, footer {
-  text-align: center;
-  margin-bottom: 2em;
+h1.typewriter {
+  overflow: hidden;
+  border-right: 2px solid #00ffee;
+  white-space: nowrap;
+  margin: 2rem auto;
+  letter-spacing: 2px;
+  animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+  width: fit-content;
 }
 
-header img {
-  width: 100%;
-  max-width: 800px;
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
 }
 
-/* Section Spacing */
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #00ffee; }
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 section {
-  padding: 2em 0;
+  padding: 3rem 2rem;
+  max-width: 900px;
+  margin: auto;
+  text-align: center;
 }
 
-h2 {
-  margin-top: 0;
+.parallax-bg {
+  background: url('assets/galaxy.jpg') no-repeat center center fixed;
+  background-size: cover;
+  height: 300px;
+  position: relative;
 }
 
-input,
-button {
-  padding: 8px;
-  border-radius: 5px;
-  border: none;
-  font-family: monospace;
-  margin: 5px;
-}
-
-button {
-  background-color: #111;
-  color: #00ff99;
+button.cta {
+  background: #000;
+  border: 2px solid #00ffee;
+  color: #00ffee;
+  padding: 0.8em 1.5em;
+  font-size: 1em;
+  font-weight: bold;
+  border-radius: 8px;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-/* Plan Cards */
-.plan {
-  border: 2px solid;
-  padding: 1em;
-  margin: 1em auto;
-  max-width: 400px;
-  border-radius: 10px;
-}
-
-/* Hyperlinks */
-a {
-  color: #00ff99;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-/* Call-to-Action Buttons (Optional) */
-.cta-button {
-  background-color: #00ffcc;
+button.cta:hover {
+  background: #00ffee;
   color: #000;
-  padding: 0.5em 1em;
-  text-decoration: none;
-  border-radius: 5px;
-  font-weight: bold;
-  display: inline-block;
-}
-
-.cta-button:hover {
-  background-color: #009988;
-  color: #fff;
-}
-
-/* Note Text */
-.note {
-  font-size: 0.8em;
-  color: #aaaaaa;
-  margin-top: 0.5em;
-}
-
-/* Loading Bar Animation */
-#loadingBar {
-  width: 100%;
-  background-color: #111;
-  padding: 10px;
-  display: none;
-  margin-top: 20px;
-  border-radius: 5px;
-}
-
-#progressBar {
-  height: 10px;
-  width: 0%;
-  background-color: #00ff99;
-  transition: width 0.3s ease;
-}
-#terminalBox {
-  box-shadow: 0 0 10px #00ffcc;
-  background: #111;
-  color: #0f0;
-}
-
-/* Success Message */
-#loadingStatus {
-  margin-top: 10px;
-  color: #00ff99;
-  font-weight: bold;
-
-  @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
 }

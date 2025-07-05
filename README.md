@@ -104,6 +104,42 @@ We’re expanding to let users:
 
 ---
 
+## Local Development
+
+To run this project locally, follow these steps:
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/Mattjhagen/PackiePresents.git
+    ```
+2.  **Navigate to the project directory:**
+    ```bash
+    cd PackiePresents
+    ```
+3.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+4.  **Create a `.env` file** in the root of the project and add the following environment variables:
+    ```
+    OPENAI_API_KEY=your_openai_api_key
+    SUPABASE_URL=your_supabase_url
+    SUPABASE_ANON_KEY=your_supabase_anon_key
+    ```
+5.  **Start the server:**
+    ```bash
+    npm start
+    ```
+The application will be running at `http://localhost:3000`.
+
+## How to Use
+
+1.  Navigate to `http://localhost:3000/resume-generator.html`.
+2.  Upload your resume in `.docx`, `.txt`, or `.pdf` format.
+3.  Click "Generate Portfolio".
+4.  A new page will open with your generated portfolio.
+5.  You can then claim a subdomain for your new portfolio.
+
 ## Deploying to Render
 
 This application is configured for easy deployment to [Render](https://render.com/).
@@ -120,7 +156,7 @@ You can deploy this application in two ways:
 4.  **Add Environment Variables:** Before the first deploy, go to the "Environment" tab for your new service in Render. Add the following as **Secret Files** or **Environment Variables**:
     *   `OPENAI_API_KEY`: Your secret key for the OpenAI API.
     *   `SUPABASE_URL`: Your project URL from your Supabase dashboard.
-    *   `SUPABASE_KEY`: Your `anon` key from your Supabase dashboard.
+    *   `SUPABASE_ANON_KEY`: Your `anon` key from your Supabase dashboard.
 5.  **Deploy:** Click "Create New Blueprint Instance". Render will pull your code, build it, and start the server. Any future pushes to your `main` branch will automatically trigger a new deployment.
 
 #### 2. Manual Deployment
@@ -131,7 +167,7 @@ If you prefer not to use a blueprint, you can create a new **Web Service** on Re
 -   **Runtime:** `Node`
 -   **Build Command:** `npm install`
 -   **Start Command:** `node server.js`
--   **Environment Variables:** Add the `OPENAI_API_KEY`, `SUPABASE_URL`, and `SUPABASE_KEY` in the "Environment" tab.
+-   **Environment Variables:** Add the `OPENAI_API_KEY`, `SUPABASE_URL`, and `SUPABASE_ANON_KEY` in the "Environment" tab.
 
 ### Accessing Your Application
 

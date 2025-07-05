@@ -7,6 +7,10 @@ const { createClient } = require('@supabase/supabase-js');
 const { saveUserDomain } = require('./saveDomain');
 const { validateResume, validateDomain } = require('./validators');
 const OpenAI = require('openai');
+const multer = require('multer');
+const mammoth = require('mammoth');
+const pdf = require('pdf-parse');
+const fs = require('fs');
 
 dotenv.config();
 const app = express();
@@ -19,6 +23,8 @@ const supabase = createClient(
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+const upload = multer({ dest: 'uploads/' });
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('public'));
@@ -27,14 +33,30 @@ app.get('/', (req, res) => {
   res.send('Supabase OAuth + Resume Parser API running!');
 });
 
-app.post("/generate-portfolio", async (req, res) => {
+app.post('/generate-portfolio', upload.single('resume'), async (req, res) => {
   try {
-    const { resumeText } = req.body;
+    let resumeText = '';
+    if (req.file) {
+      if (req.file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+        const result = await mammoth.extractRawText({ path: req.file.path });
+        resumeText = result.value;
+      } else if (req.file.mimetype === 'application/pdf') {
+        const dataBuffer = fs.readFileSync(req.file.path);
+        const data = await pdf(dataBuffer);
+        resumeText = data.text;
+      } else if (req.file.mimetype === 'text/plain') {
+        resumeText = fs.readFileSync(req.file.path, 'utf8');
+      }
+      fs.unlinkSync(req.file.path); // Clean up the uploaded file
+    } else {
+      resumeText = req.body.resumeText;
+    }
+
     const gptRes = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: 'gpt-4',
       messages: [
-        { role: "system", content: "You are a web designer." },
-        { role: "user", content: `Generate an HTML about-me page for this resume. At the bottom of the generated HTML, include a footer with a prominent link that says 'Create Your Own Portfolio' and points to '/resume-generator.html'. The design should be modern and professional.\n\n${resumeText}` },
+        { role: 'system', content: 'You are a web designer.' },
+        { role: 'user', content: `Generate an HTML about-me page for this resume. At the bottom of the generated HTML, include a footer with a prominent link that says 'Create Your Own Portfolio' and points to '/resume-generator.html'. The design should be modern and professional.\n\n${resumeText}` },
       ],
     });
 
@@ -42,7 +64,7 @@ app.post("/generate-portfolio", async (req, res) => {
     res.json({ html });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Resume processing failed" });
+    res.status(500).json({ error: 'Resume processing failed' });
   }
 });
 

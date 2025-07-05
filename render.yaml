@@ -24,7 +24,7 @@ services:
         value: placeholder_openai_key
       - key: SUPABASE_URL
         value: placeholder_supabase_url
-      - key: SUPABASE_KEY
+      - key: SUPABASE_ANON_KEY
         # Note: Use 'fromSecret' for sensitive keys if you prefer.
         # For simplicity, we are just setting them in the UI.
         value: placeholder_supabase_key

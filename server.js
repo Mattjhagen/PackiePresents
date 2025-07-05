@@ -56,7 +56,7 @@ app.post('/generate-portfolio', upload.single('resume'), async (req, res) => {
       model: 'gpt-4',
       messages: [
         { role: 'system', content: 'You are a web designer.' },
-        { role: 'user', content: `Generate an HTML about-me page for this resume. At the bottom of the generated HTML, include a footer with a prominent link that says 'Create Your Own Portfolio' and points to '/resume-generator.html'. The design should be modern and professional.\n\n${resumeText}` },
+        { role: 'user', content: `Generate an HTML about-me page for this resume. At the bottom of the generated HTML, include a footer with a prominent link that says 'Create Your Own Portfolio' and points to '/resume-generator.html'. The design should be modern and professional. Also include a section with the id "domain-registration" that allows the user to claim a subdomain. The form should have an input with the id "domainInput" and a button with the text "Register Domain". The form should call the "register" function on submit.\n\n${resumeText}` },
       ],
     });
 
@@ -66,6 +66,12 @@ app.post('/generate-portfolio', upload.single('resume'), async (req, res) => {
     console.error(err);
     res.status(500).json({ error: 'Resume processing failed' });
   }
+});
+
+app.post('/register-domain', async (req, res) => {
+  const { email, domain } = req.body;
+  await saveUserDomain(email, 'subdomain', domain);
+  res.json({ message: 'Domain saved!' });
 });
 
 app.get('/login', async (req, res) => {

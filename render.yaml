@@ -1,0 +1,30 @@
+# render.yaml
+# This file configures the deployment of the PackiePresents application on Render.
+# For more details, see the Render documentation: https://render.com/docs/blueprint-spec
+
+services:
+  # A unique name for your web service
+  - name: packie-presents
+    # The type of service. 'web' means it's a web server.
+    type: web
+    # The runtime environment. Render will use the latest stable Node.js version.
+    runtime: node
+    # The command to build the application (install dependencies).
+    # Render runs this command automatically on every deploy.
+    buildCommand: "npm install"
+    # The command to start the application.
+    startCommand: "node server.js"
+    # Environment variables.
+    # IMPORTANT: For security, set the actual values in the Render dashboard, not here.
+    # Go to your service's 'Environment' tab on Render to add these as Secret Files or Environment Variables.
+    envVars:
+      - key: OPENAI_API_KEY
+        # Leave 'value' empty or provide a non-sensitive placeholder.
+        # The actual key will be set in the Render dashboard.
+        value: placeholder_openai_key
+      - key: SUPABASE_URL
+        value: placeholder_supabase_url
+      - key: SUPABASE_KEY
+        # Note: Use 'fromSecret' for sensitive keys if you prefer.
+        # For simplicity, we are just setting them in the UI.
+        value: placeholder_supabase_key

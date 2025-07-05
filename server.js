@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const { createClient } = require('@supabase/supabase-js');
 const { saveUserDomain } = require('./saveDomain');
 const { validateResume, validateDomain } = require('./validators');
+const OpenAI = require('openai');
 
 dotenv.config();
 const app = express();
@@ -16,6 +17,8 @@ const supabase = createClient(
   process.env.SUPABASE_ANON_KEY
 );
 
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('public'));
@@ -24,9 +27,29 @@ app.get('/', (req, res) => {
   res.send('Supabase OAuth + Resume Parser API running!');
 });
 
+app.post("/generate-portfolio", async (req, res) => {
+  try {
+    const { resumeText } = req.body;
+    const gptRes = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        { role: "system", content: "You are a web designer." },
+        { role: "user", content: `Generate an HTML about-me page for this resume. At the bottom of the generated HTML, include a footer with a prominent link that says 'Create Your Own Portfolio' and points to '/resume-generator.html'. The design should be modern and professional.\n\n${resumeText}` },
+      ],
+    });
+
+    const html = gptRes.choices[0].message.content;
+    res.json({ html });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Resume processing failed" });
+  }
+});
+
 app.get('/login', async (req, res) => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
+
     options: {
       redirectTo: `${process.env.PUBLIC_URL || 'https://packiepresents.onrender.com'}/callback`
     }

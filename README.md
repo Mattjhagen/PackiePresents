@@ -101,3 +101,38 @@ We’re expanding to let users:
 
 — Matt & Terra  
 #VanLife | #TransTech
+
+---
+
+## Deploying to Render
+
+This application is configured for easy deployment to [Render](https://render.com/).
+
+### Deployment Methods
+
+You can deploy this application in two ways:
+
+#### 1. Automatic Deployment from GitHub (Recommended)
+
+1.  **Fork this repository** to your own GitHub account.
+2.  Go to the [Render Dashboard](https://dashboard.render.com/) and create a **New Blueprint Instance**.
+3.  Connect your GitHub account and select your forked repository. Render will automatically detect the `render.yaml` file and configure the service.
+4.  **Add Environment Variables:** Before the first deploy, go to the "Environment" tab for your new service in Render. Add the following as **Secret Files** or **Environment Variables**:
+    *   `OPENAI_API_KEY`: Your secret key for the OpenAI API.
+    *   `SUPABASE_URL`: Your project URL from your Supabase dashboard.
+    *   `SUPABASE_KEY`: Your `anon` key from your Supabase dashboard.
+5.  **Deploy:** Click "Create New Blueprint Instance". Render will pull your code, build it, and start the server. Any future pushes to your `main` branch will automatically trigger a new deployment.
+
+#### 2. Manual Deployment
+
+If you prefer not to use a blueprint, you can create a new **Web Service** on Render and configure it manually:
+
+-   **Repository:** Connect your GitHub account and select the repository.
+-   **Runtime:** `Node`
+-   **Build Command:** `npm install`
+-   **Start Command:** `node server.js`
+-   **Environment Variables:** Add the `OPENAI_API_KEY`, `SUPABASE_URL`, and `SUPABASE_KEY` in the "Environment" tab.
+
+### Accessing Your Application
+
+Once deployed, Render will provide you with a public URL (e.g., `https://packie-presents.onrender.com`) where you can access your application.
